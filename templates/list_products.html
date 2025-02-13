@@ -1,0 +1,74 @@
+<!-- templates/list_products.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product List</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Product List</h1>
+        <a href="{{ url_for('download_products') }}" class="btn">Download CSV</a>
+        <a href="{{ url_for('upload_products') }}" class="btn">Upload CSV</a>
+        <table>
+            <tr>
+                <th>Product S.No</th>
+                <th>Product Name</th>
+                <th>Rate</th>
+                <th>VAT Check</th>
+                <th>Declaration Number</th>
+                <th>Release Date</th>
+                <th>Quantity</th>
+                <th>Customs Duty</th>
+                <th>VAT Value</th>
+                <th>Other Cost</th>
+                <th>Declared Value</th>
+                <th>Supplier Name</th>
+                <th>Supplier Invoice No</th>
+                <th>Country</th>
+                <th>Invoice Date</th>
+                <th>Invoice Value</th>
+                <th>Shipping Agent Name</th>
+                <th>Shipping Invoice No</th>
+                <th>Shipping Invoice Date</th>
+                <th>Shipping Invoice Value</th>
+                {% if current_user.is_authenticated and current_user.admin %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+            {% for prod in products %}
+            <tr>
+                <td>{{ prod.product_s_no }}</td>
+                <td>{{ prod.product_name }}</td>
+                <td>{{ prod.rate }}</td>
+                <td>{{ prod.vat_check }}</td>
+                <td>{{ prod.declaration_number }}</td>
+                <td>{{ prod.release_date }}</td>
+                <td>{{ prod.quantity }}</td>
+                <td>{{ prod.customs_duty }}</td>
+                <td>{{ prod.vat_value }}</td>
+                <td>{{ prod.other_cost }}</td>
+                <td>{{ prod.declared_value }}</td>
+                <td>{{ prod.supplier_name }}</td>
+                <td>{{ prod.supplier_invoice_no }}</td>
+                <td>{{ prod.country }}</td>
+                <td>{{ prod.invoice_date }}</td>
+                <td>{{ prod.invoice_value }}</td>
+                <td>{{ prod.shipping_agent_name }}</td>
+                <td>{{ prod.shipping_invoice_no }}</td>
+                <td>{{ prod.shipping_invoice_date }}</td>
+                <td>{{ prod.shipping_invoice_value }}</td>
+                {% if current_user.is_authenticated and current_user.admin %}
+                <td>
+                    <form action="{{ url_for('delete_product', product_s_no=prod.product_s_no) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>

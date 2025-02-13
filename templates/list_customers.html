@@ -1,0 +1,52 @@
+<!-- templates/list_customers.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer List</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Customer List</h1>
+        <a href="{{ url_for('download_customers') }}" class="btn">Download CSV</a>
+        <a href="{{ url_for('upload_customers') }}" class="btn">Upload CSV</a>
+        <table>
+            <tr>
+                <th>Customer S.No</th>
+                <th>Customer Name</th>
+                <th>Sales Person</th>
+                <th>Address</th>
+                <th>VAT No</th>
+                <th>Credit Term</th>
+                <th>Contact Person</th>
+                <th>Contact Number</th>
+                <th>Company Registration No</th>
+                {% if current_user.is_authenticated and current_user.admin %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+            {% for cust in customers %}
+            <tr>
+                <td>{{ cust.customer_s_no }}</td>
+                <td>{{ cust.customer_name }}</td>
+                <td>{{ cust.sales_person }}</td>
+                <td>{{ cust.address }}</td>
+                <td>{{ cust.vat_no }}</td>
+                <td>{{ cust.credit_term }}</td>
+                <td>{{ cust.contact_person }}</td>
+                <td>{{ cust.contact_number }}</td>
+                <td>{{ cust.company_registration_no }}</td>
+                {% if current_user.is_authenticated and current_user.admin %}
+                <td>
+                    <form action="{{ url_for('delete_customer', customer_s_no=cust.customer_s_no) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>

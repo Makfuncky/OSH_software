@@ -1,0 +1,178 @@
+[
+    {
+        "supplier_s_no": "S_0001",
+        "supplier_name": "TALACHIN ARGO IND CO",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "IRAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0002",
+        "supplier_name": "PARKER-MIGLIORINI INTERNATIONAL",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "BRAZIL",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0003",
+        "supplier_name": "MASSI TRADING DMCC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "UAE",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0004",
+        "supplier_name": "FOODY'S INTERNATIONAL GENERAL TRADING & CONTRACTING CO.",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "EGYPT",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0005",
+        "supplier_name": "KIT INTERNATIONAL INC.",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "BRAZIL",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0006",
+        "supplier_name": "NOOR ALMIZAN GOODS WHOLESALERS LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "UAE",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0007",
+        "supplier_name": "PARKER-MIGLIORINI INTERNATIONAL",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "URUGUAY",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0008",
+        "supplier_name": "AL HAQIQA LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0009",
+        "supplier_name": "SAMRAH ENTERPRISES",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "PAK",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0010",
+        "supplier_name": "Hamid & Mojtaba and Partners Trading LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0011",
+        "supplier_name": "LOOK FOOD FOODSTUFF TRADING CO. LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "UAE",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0012",
+        "supplier_name": "FIF INTERNATIONAL BUSINESS LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "UAE",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0013",
+        "supplier_name": "International Logistics Services ILS",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0014",
+        "supplier_name": "Ghazal International LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0015",
+        "supplier_name": "Hidra For Food Trading Co LLC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "UAE",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0016",
+        "supplier_name": "Fauji Fresh n Freeze Limited",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "PAK",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0017",
+        "supplier_name": "Masharie Al Mutaharif Albruonzi LLC V1",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0018",
+        "supplier_name": "Wild Desert Deer SPC",
+        "contact_person": "",
+        "supplier_type": "Purchase",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0019",
+        "supplier_name": "Runway Logistics Services",
+        "contact_person": "",
+        "supplier_type": "Shipping",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0020",
+        "supplier_name": "Al Matar International",
+        "contact_person": "",
+        "supplier_type": "Shipping",
+        "address": "OMAN",
+        "contact_number": ""
+    },
+    {
+        "supplier_s_no": "S_0021",
+        "supplier_name": "Ather LLC",
+        "contact_person": "Muhammad Ather",
+        "supplier_type": "Purchase",
+        "address": "Mabellah",
+        "contact_number": "+96894205704"
+    },
+    {
+        "supplier_s_no": "S_0022",
+        "supplier_name": "Ather LLC",
+        "contact_person": "Muhammad Ather",
+        "supplier_type": "Purchase",
+        "address": "k-37 zahid square block-16 F.B area",
+        "contact_number": "03412382573"
+    }
+]

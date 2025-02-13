@@ -1,0 +1,131 @@
+[
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1500.0,
+        "received_date": "2025-02-05",
+        "transaction_type": "Cash Deposit",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2556",
+                "custoemr_name": "John Doe",
+                "remaining_amount": 282.45,
+                "amount_againts_invoice": 282.45,
+                "comments": "Finished Payment"
+            },
+            {
+                "invoice_number": "T-2579",
+                "custoemr_name": "World Gift Distinguish LLC (City Mart)",
+                "remaining_amount": 583.38,
+                "amount_againts_invoice": 583.38,
+                "comments": "Frist Payment"
+            },
+            {
+                "invoice_number": "T-2578",
+                "custoemr_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+                "remaining_amount": 765.65,
+                "amount_againts_invoice": 634.17,
+                "comments": "Frist Payment"
+            }
+        ]
+    },
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1000.0,
+        "received_date": "2025-02-05",
+        "transaction_type": "Online Transfer",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2580",
+                "custoemr_name": "Ayham Al Sarayji Trading (Seeb)",
+                "remaining_amount": 719.5,
+                "amount_againts_invoice": 500.0,
+                "comments": "if any details"
+            },
+            {
+                "invoice_number": "T-2561",
+                "custoemr_name": "Fatayar Ali Al Tayar",
+                "remaining_amount": 620.0,
+                "amount_againts_invoice": 500.0,
+                "comments": "if any details"
+            }
+        ]
+    },
+    {
+        "bank_name": "Alizz Islamic Bank",
+        "recieved_amount": 1700.0,
+        "received_date": "2025-02-05",
+        "transaction_type": "Cash Deposit",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2567",
+                "custoemr_name": "Ayham Al Sarayji Trading (Seeb)",
+                "remaining_amount": 204.05,
+                "amount_againts_invoice": 1500.0,
+                "comments": "Frist Payment"
+            },
+            {
+                "invoice_number": "T-2561",
+                "custoemr_name": "Fatayar Ali Al Tayar",
+                "remaining_amount": 320.0,
+                "amount_againts_invoice": 200.0,
+                "comments": "Frist Payment"
+            }
+        ]
+    },
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1500.0,
+        "received_date": "2025-02-05",
+        "transaction_type": "Cash Deposit",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2556",
+                "custoemr_name": "John Doe",
+                "remaining_amount": 282.45,
+                "amount_againts_invoice": 282.45,
+                "comments": "Finished Payment"
+            },
+            {
+                "invoice_number": "T-2579",
+                "custoemr_name": "World Gift Distinguish LLC (City Mart)",
+                "remaining_amount": 583.38,
+                "amount_againts_invoice": 583.38,
+                "comments": "Frist Payment"
+            },
+            {
+                "invoice_number": "T-2578",
+                "custoemr_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+                "remaining_amount": 765.65,
+                "amount_againts_invoice": 634.17,
+                "comments": "Frist Payment"
+            }
+        ]
+    },
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1000.0,
+        "received_date": "2025-02-06",
+        "transaction_type": "Online Transfer",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2558",
+                "custoemr_name": "John Doe",
+                "remaining_amount": 1338.75,
+                "amount_againts_invoice": 500.0,
+                "comments": "partial"
+            },
+            {
+                "invoice_number": "T-2577",
+                "custoemr_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+                "remaining_amount": 2455.0,
+                "amount_againts_invoice": 500.0,
+                "comments": "partail"
+            }
+        ]
+    }
+]

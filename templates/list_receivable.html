@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receivables List</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Receivables List</h1>
+
+    {% if receivables %}
+      <div class="table-container">
+        <table class="receivables-table">
+          <thead>
+            <tr>
+              <th>Invoice Number</th>
+              <th>Customer Name</th>
+              <th>Date of Invoice</th>
+              <th>Invoice Total</th>
+              <th>Total Received</th>
+              <th>Remaining Receivable</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for receivable in receivables %}
+              <tr>
+                <td>{{ receivable.invoice_number }}</td>
+                <td>{{ receivable.customer_name }}</td>
+                <td>{{ receivable.invoice_date }}</td>
+                <td>{{ "%.2f"|format(receivable.invoice_total) }}</td>
+                <td>{{ "%.2f"|format(receivable.total_received) }}</td>
+                <td>{{ "%.2f"|format(receivable.remaining_receivable) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3"><strong>Total</strong></td>
+              <td>{{ "%.2f"|format(total_invoice) }}</td>
+              <td>{{ "%.2f"|format(total_received) }}</td>
+              <td>{{ "%.2f"|format(total_remaining) }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <!-- Download Button using your .btn class -->
+      <a href="{{ url_for('download_receivable') }}" class="btn">Download Receivables as CSV</a>
+      {% else %}
+      <p class="no-receivables">No receivables found.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

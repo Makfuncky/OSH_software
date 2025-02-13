@@ -1,0 +1,68 @@
+[
+    {
+        "customer_s_no": "C_0002",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "sales_person": "Mohtesan",
+        "address": "Sultanate of Oman,                                             ",
+        "vat_no": "OM1100050332",
+        "credit_term": "Cash",
+        "contact_person": "Sajid",
+        "contact_number": "91787576",
+        "company_registration_no": "0"
+    },
+    {
+        "customer_s_no": "C_0003",
+        "customer_name": "Quality & Saving Center",
+        "sales_person": "Mohtesan",
+        "address": "Amerat",
+        "vat_no": "OM1100041460",
+        "credit_term": "Cash",
+        "contact_person": "Magdi",
+        "contact_number": "79903234",
+        "company_registration_no": "0"
+    },
+    {
+        "customer_s_no": "C_0004",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "sales_person": "Mohtesan",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0   ",
+        "vat_no": "OM1100316903",
+        "credit_term": "30 days",
+        "contact_person": "Shafeer",
+        "contact_number": "79896067",
+        "company_registration_no": "0"
+    },
+    {
+        "customer_s_no": "C_0005",
+        "customer_name": "Ather LLC",
+        "sales_person": "Omer",
+        "address": "Mabella",
+        "vat_no": "OM111100001",
+        "credit_term": "10",
+        "contact_person": "Ather",
+        "contact_number": "94205704",
+        "company_registration_no": "1345710000"
+    },
+    {
+        "customer_s_no": "C_0006",
+        "customer_name": "AA LLC",
+        "sales_person": "Dilshar",
+        "address": "Mabellah, Muscat",
+        "vat_no": "OM14141441",
+        "credit_term": "30",
+        "contact_person": "Ather Khan",
+        "contact_number": "94205704",
+        "company_registration_no": "CR11221122"
+    },
+    {
+        "customer_s_no": "C_0007",
+        "customer_name": "Muhammad Ather",
+        "sales_person": "Ather",
+        "address": "k-37 zahid square block-16 F.B area",
+        "vat_no": "OM1100041460",
+        "credit_term": "30",
+        "contact_person": "Muhammad Ather",
+        "contact_number": "03412382573",
+        "company_registration_no": "CR151515"
+    }
+]

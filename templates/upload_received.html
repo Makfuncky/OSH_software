@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload Received Payments CSV</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Upload Received Payments CSV</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required>
+      <br>
+      <button type="submit" class="btn">Upload CSV</button>
+    </form>
+    <br>
+    <a href="{{ url_for('list_received') }}" class="btn">Back to Received Payments List</a>
+  </div>
+</body>

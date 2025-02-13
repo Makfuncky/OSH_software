@@ -1,0 +1,14 @@
+[
+    {
+        "id": "2",
+        "username": "Mak",
+        "password_hash": "scrypt:32768:8:1$1eBrcidWPvSVPQQI$fbbd10d5f295da8dd6621c371095db1804a30817867e419168013dfc9101fced11fc0ecdac94143eac7a17d726da7ea30d37ea871b367f3a250d0c5b22c7f4eb",
+        "admin": false
+    },
+    {
+        "id": "3",
+        "username": "Muhammad Ather",
+        "password_hash": "scrypt:32768:8:1$uuNTn9qOModumai2$7099e6528973a2f7e72fa5d1edd11b661d146cf4edf9c56990de6042c489a595162a2cb524853c8290c054129af5266b4fab90abb6b842d01096255be42a46cf",
+        "admin": true
+    }
+]

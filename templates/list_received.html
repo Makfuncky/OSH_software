@@ -1,0 +1,85 @@
+<!-- templates/list_received.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Received Payments List</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Received Payments</h1>
+    
+    {# Remove or comment out the download_received link using Jinja comment syntax #}
+    {# <a href="{{ url_for('download_received') }}" class="btn">Download CSV</a> #}
+    <a href="{{ url_for('upload_received') }}" class="btn">Upload CSV</a>
+    <a href="{{ url_for('download_received_detailed') }}" class="btn">Download Detailed CSV</a>
+    
+    <!-- Received Payments Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th>Bank Name</th>
+          <th>Received Amount</th>
+          <th>Received Date</th>
+          <th>Transaction Type</th>
+          <th>Cheque Details</th>
+          <th>Allocations</th>
+          {% if current_user.is_authenticated and current_user.admin %}
+          <th>Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for payment in payments %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ payment.bank_name }}</td>
+          <td>{{ payment.recieved_amount }}</td>
+          <td>{{ payment.received_date }}</td>
+          <td>{{ payment.transaction_type }}</td>
+          <td>{{ payment.cheque_details }}</td>
+          <td>
+            {% if payment.allocations %}
+              <table class="nested-table">
+                <thead>
+                  <tr>
+                    <th>Invoice No.</th>
+                    <th>Customer Name</th>
+                    <th>Remaining Amount</th>
+                    <th>Amount Against Invoice</th>
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for alloc in payment.allocations %}
+                  <tr>
+                    <td>{{ alloc.invoice_number }}</td>
+                    <td>{{ alloc.custoemr_name }}</td>
+                    <td>{{ alloc.remaining_amount }}</td>
+                    <td>{{ alloc.amount_againts_invoice }}</td>
+                    <td>{{ alloc.comments }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              No Allocations
+            {% endif %}
+          </td>
+          {% if current_user.is_authenticated and current_user.admin %}
+          <td>
+            <form action="{{ url_for('delete_received', payment_index=loop.index0) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this payment record?');">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+  </div>
+</body>
+</html>

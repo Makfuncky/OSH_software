@@ -1,0 +1,92 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSH Investment Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7f6;
+    }
+    .header {
+        background-color: #7B68EE;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+    .header .user-info {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 14px;
+    }
+    .header a {
+        color: white;
+        text-decoration: none;
+    }
+    .container {
+        text-align: center;
+        margin-top: 100px;
+    }
+    h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #7B68EE;
+    }
+    p {
+        font-size: 18px;
+        color: #555;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #7B68EE;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        font-size: 18px;
+        transition: background-color 0.3s;
+    }
+    .btn:hover {
+        background-color: #6a53c4;
+    }
+    .footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>OSH Investment System</h1>
+    <div class="user-info">
+      Welcome, {{ current_user.username }}! | <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Your Dashboard</h1>
+    <p>This is a protected page accessible only to logged-in users. Manage your investments, sales, purchases, and more from here.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn">Go to Dashboard</a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>&copy; 2025 OSH Investments. All rights reserved.</p>
+  </div>
+
+</body>
+</html>

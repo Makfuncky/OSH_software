@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Invoices CSV</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .btn { display: inline-block; padding: 8px 12px; margin: 5px 0; background-color: #007BFF; color: #fff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Invoices CSV</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv">
+            <button type="submit" class="btn">Upload CSV</button>
+        </form>
+        <a href="{{ url_for('list_invoices') }}" class="btn">Back to Invoice List</a>
+    </div>
+</body>
+</html>

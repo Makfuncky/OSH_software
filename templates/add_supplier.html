@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Supplier</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- <style>
+        .container { max-width: 600px; margin: auto; }
+        .btn { padding: 8px 12px; background: #734f96; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        label { display: block; margin-top: 10px; }
+        input[type="text"], select { width: 100%; padding: 8px; margin-top: 5px; }
+    </style> -->
+</head>
+<body>
+    <div class="container">
+        <h1>Add Supplier</h1>
+        <form method="POST">
+            <label for="supplier_s_no">Supplier S.No:</label>
+            <input type="text" id="supplier_s_no" name="supplier_s_no" value="{{ new_supplier_number }}" readonly>
+            
+            <label for="supplier_name">Supplier Name:</label>
+            <input type="text" id="supplier_name" name="supplier_name" required>
+            
+            <label for="contact_person">Contact Person:</label>
+            <input type="text" id="contact_person" name="contact_person">
+            
+            <label for="supplier_type">Supplier Type:</label>
+            <select id="supplier_type" name="supplier_type" required>
+                <option value="Purchase">Purchase</option>
+                <option value="Shipping">Shipping</option>
+            </select>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+            
+            <label for="contact_number">Contact Number:</label>
+            <input type="text" id="contact_number" name="contact_number">
+            
+            <br><br>
+            <button type="submit" class="btn">Save Supplier</button>
+        </form>
+        <br>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>

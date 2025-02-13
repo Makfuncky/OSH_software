@@ -1,0 +1,649 @@
+[
+    {
+        "id": 1,
+        "invoice_number": "T-2556",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 5.0,
+                "rate": 25.0,
+                "gross_amount": 125.0,
+                "vat_amount": 6.25,
+                "net_amount": 131.25
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG (Block)",
+                "quantity": 8.0,
+                "rate": 18.0,
+                "gross_amount": 144.0,
+                "vat_amount": 7.2,
+                "net_amount": 151.2
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "invoice_number": "T-2557",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 12.0,
+                "rate": 25.0,
+                "gross_amount": 300.0,
+                "vat_amount": 15.0,
+                "net_amount": 315.0
+            },
+            {
+                "id": 2,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 45.0,
+                "rate": 25.0,
+                "gross_amount": 1125.0,
+                "vat_amount": 56.25,
+                "net_amount": 1181.25
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "invoice_number": "T-2558",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 15.0,
+                "rate": 25.0,
+                "gross_amount": 375.0,
+                "vat_amount": 18.75,
+                "net_amount": 393.75
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG (Block)",
+                "quantity": 50.0,
+                "rate": 18.0,
+                "gross_amount": 900.0,
+                "vat_amount": 45.0,
+                "net_amount": 945.0
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "invoice_number": "T-2559",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 10.0,
+                "rate": 25.0,
+                "gross_amount": 250.0,
+                "vat_amount": 0.0,
+                "net_amount": 250.0
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG (Block)",
+                "quantity": 10.0,
+                "rate": 18.0,
+                "gross_amount": 180.0,
+                "vat_amount": 9.0,
+                "net_amount": 189.0
+            },
+            {
+                "id": 3,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 10.0,
+                "rate": 25.0,
+                "gross_amount": 250.0,
+                "vat_amount": 0.0,
+                "net_amount": 250.0
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "invoice_number": "T-2560",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 10.0,
+                "rate": 18.0,
+                "gross_amount": 180.0,
+                "vat_amount": 0.0,
+                "net_amount": 180.0
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG (Block)",
+                "quantity": 10.0,
+                "rate": 20.0,
+                "gross_amount": 200.0,
+                "vat_amount": 10.0,
+                "net_amount": 210.0
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "invoice_number": "T-2561",
+        "date": "07-Dec-24",
+        "customer_name": "Fatayar Ali Al Tayar",
+        "address": "Al Khoud 6",
+        "vat_no": "OMxxxxx001",
+        "po_no": "P-10000001",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG (Block)",
+                "quantity": 20.0,
+                "rate": 20.0,
+                "gross_amount": 400.0,
+                "vat_amount": 20.0,
+                "net_amount": 420.0
+            },
+            {
+                "id": 2,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 20.0,
+                "rate": 20.0,
+                "gross_amount": 400.0,
+                "vat_amount": 0.0,
+                "net_amount": 400.0
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "invoice_number": "T-2562",
+        "date": "07-Dec-24",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 10.0,
+                "rate": 15.0,
+                "gross_amount": 150.0,
+                "vat_amount": 7.5,
+                "net_amount": 157.5
+            },
+            {
+                "id": 2,
+                "product_name": "Mr. John French Fries Cut (Crinkle) (4x2.5KG)",
+                "quantity": 15.0,
+                "rate": 10.0,
+                "gross_amount": 150.0,
+                "vat_amount": 7.5,
+                "net_amount": 157.5
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "invoice_number": "T-2563",
+        "date": "07-Dec-24",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Tail fat 20KG",
+                "quantity": 27.0,
+                "rate": 10.0,
+                "gross_amount": 270.0,
+                "vat_amount": 13.5,
+                "net_amount": 283.5
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "invoice_number": "T-2564",
+        "date": "08-Dec-24",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 10.0,
+                "rate": 18.0,
+                "gross_amount": 180.0,
+                "vat_amount": 9.0,
+                "net_amount": 189.0
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin (Pure) 6 x 1.8KG - (Block)",
+                "quantity": 18.0,
+                "rate": 10.0,
+                "gross_amount": 180.0,
+                "vat_amount": 0.0,
+                "net_amount": 180.0
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "invoice_number": "T-2565",
+        "date": "09-Dec-24",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "OPA French Fries (9 * 9 mm) (5 x 2.5KG)",
+                "quantity": 18.0,
+                "rate": 10.0,
+                "gross_amount": 180.0,
+                "vat_amount": 9.0,
+                "net_amount": 189.0
+            },
+            {
+                "id": 2,
+                "product_name": "AL Kamil - Bobby Veal - 18KG",
+                "quantity": 27.0,
+                "rate": 10.0,
+                "gross_amount": 270.0,
+                "vat_amount": 0.0,
+                "net_amount": 270.0
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "invoice_number": "T-2566",
+        "date": "08-Dec-24",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 6.0,
+                "rate": 10.0,
+                "gross_amount": 60.0,
+                "vat_amount": 3.0,
+                "net_amount": 63.0
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "invoice_number": "T-2567",
+        "date": "08-Dec-24",
+        "customer_name": "Ayham Al Sarayji Trading (Seeb)",
+        "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11",
+        "vat_no": "OM1100292606",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 6.0,
+                "rate": 5.0,
+                "gross_amount": 30.0,
+                "vat_amount": 1.5,
+                "net_amount": 31.5
+            },
+            {
+                "id": 2,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 6.2,
+                "rate": 5.0,
+                "gross_amount": 31.0,
+                "vat_amount": 1.55,
+                "net_amount": 32.55
+            },
+            {
+                "id": 3,
+                "product_name": "AL Kamil - Bobby Veal - 18KG",
+                "quantity": 28.0,
+                "rate": 5.0,
+                "gross_amount": 140.0,
+                "vat_amount": 0.0,
+                "net_amount": 140.0
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "invoice_number": "T-2568",
+        "date": "08-Dec-24",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
+        "vat_no": "OM1100316903",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 1.0,
+                "rate": 6.0,
+                "gross_amount": 6.0,
+                "vat_amount": 0.3,
+                "net_amount": 6.3
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin - 5 x 2KG - (Grated)",
+                "quantity": 1.0,
+                "rate": 18.0,
+                "gross_amount": 18.0,
+                "vat_amount": 0.0,
+                "net_amount": 18.0
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "invoice_number": "T-2569",
+        "date": "21-Dec-24",
+        "customer_name": "Ayham Al Sarayji Trading (Seeb)",
+        "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11 ",
+        "vat_no": "OM1100292606",
+        "po_no": "01117",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 100.0,
+                "rate": 6.0,
+                "gross_amount": 600.0,
+                "vat_amount": 30.0,
+                "net_amount": 630.0
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "invoice_number": "T-2570",
+        "date": "31-Jan-25",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "Cash",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 15,
+                "product_name": "AL Kamil - Bobby Veal - 18KG",
+                "quantity": 10,
+                "rate": 6.0,
+                "gr_amount": 60.0,
+                "vat": 0.0,
+                "net_amount": 60.0
+            },
+            {
+                "id": 2,
+                "invoice_id": 15,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 20,
+                "rate": 6.0,
+                "gr_amount": 120.0,
+                "vat": 6.0,
+                "net_amount": 126.0
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "invoice_number": "T-2571",
+        "date": "31-Jan-25",
+        "customer_name": "Ather LLC",
+        "address": "Mabella",
+        "vat_no": "OM111100001",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG - (Block)",
+                "quantity": 10,
+                "rate": 17.0,
+                "gr_amount": 170.0,
+                "vat": 8.5,
+                "net_amount": 178.5
+            },
+            {
+                "id": 2,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 10,
+                "rate": 6.0,
+                "gr_amount": 60.0,
+                "vat": 3.0,
+                "net_amount": 63.0
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "invoice_number": "T-2572",
+        "date": "31-Jan-25",
+        "customer_name": "Ather LLC",
+        "address": "Mabella",
+        "vat_no": "OM111100001",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "AL Kamil - Slice - 18KG",
+                "quantity": 20,
+                "rate": 25.0,
+                "gr_amount": 500.0,
+                "vat": 25.0,
+                "net_amount": 525.0
+            },
+            {
+                "id": 2,
+                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
+                "quantity": 10,
+                "rate": 6.0,
+                "gr_amount": 60.0,
+                "vat": 3.0,
+                "net_amount": 63.0
+            },
+            {
+                "id": 3,
+                "product_name": "OPA French Fries (9 * 9 mm) (5 x 2.5KG)",
+                "quantity": 0,
+                "rate": 8.0,
+                "gr_amount": 0.0,
+                "vat": 0.0,
+                "net_amount": 0.0
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "invoice_number": "T-2573",
+        "date": "03-Feb-25",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "po_no": "Cash",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 18,
+                "product_name": "AL Kamil - Slice - 18KG",
+                "quantity": 10,
+                "rate": 25.0,
+                "gr_amount": 250.0,
+                "vat": 0.0,
+                "net_amount": 250.0
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "invoice_number": "T-2574",
+        "date": "03-Feb-25",
+        "customer_name": "Ather LLC",
+        "address": "Mabella",
+        "vat_no": "OM111100001",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 57,
+                "rate": 6.74,
+                "gr_amount": 242.35,
+                "vat": 12.117,
+                "net_amount": 254.468
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "invoice_number": "T-2575",
+        "date": "03-Feb-25",
+        "customer_name": "Ayham Al Sarayji Trading (Seeb)",
+        "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11",
+        "vat_no": "OM1100292606",
+        "po_no": "0",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 20,
+                "product_name": "Mozzarella Cheese - Almas 6 x 2KG (White)",
+                "quantity": 10,
+                "rate": 25.0,
+                "gr_amount": 250.0,
+                "vat": 0.0,
+                "net_amount": 250.0
+            },
+            {
+                "id": 2,
+                "invoice_id": 20,
+                "product_name": "AL Kamil - Bobby Veal - 18KG",
+                "quantity": 100,
+                "rate": 14.0,
+                "gr_amount": 1400.0,
+                "vat": 0.0,
+                "net_amount": 1400.0
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "invoice_number": "T-2576",
+        "date": "03-Feb-25",
+        "customer_name": "Ayham Al Sarayji Trading (Seeb)",
+        "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11",
+        "vat_no": "OM1100292606",
+        "po_no": "0",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 21,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 1000,
+                "rate": 5.55,
+                "gr_amount": 5550.0,
+                "vat": 277.5,
+                "net_amount": 5827.5
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "invoice_number": "T-2577",
+        "date": "03-Feb-25",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
+        "vat_no": "OM1100316903",
+        "po_no": "30 days",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 22,
+                "product_name": "AL Kamil - Slice - 18KG",
+                "quantity": 100,
+                "rate": 24.55,
+                "gr_amount": 2455.0,
+                "vat": 0.0,
+                "net_amount": 2455.0
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "invoice_number": "T-2578",
+        "date": "03-Feb-25",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
+        "vat_no": "OM1100316903",
+        "po_no": "30 days",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "AL Kamil - Slice - 18KG",
+                "quantity": 43,
+                "rate": 7.55,
+                "gr_amount": 324.65,
+                "vat": 0.0,
+                "net_amount": 324.65
+            },
+            {
+                "id": 2,
+                "product_name": "Tail fat 20KG",
+                "quantity": 21,
+                "rate": 20.0,
+                "gr_amount": 420.0,
+                "vat": 21.0,
+                "net_amount": 441.0
+            },
+            {
+                "id": 3,
+                "product_name": "Strawberry",
+                "quantity": 20,
+                "rate": 25.0,
+                "gr_amount": 500.0,
+                "vat": 0.0,
+                "net_amount": 500.0
+            }
+        ]
+    }
+]

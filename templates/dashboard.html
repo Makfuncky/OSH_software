@@ -1,0 +1,129 @@
+<!-- templates/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSH Investment - Management System</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    /* Dashboard styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+    }
+    .header {
+      text-align: center;
+      padding: 20px;
+      background-color: #7B68EE;
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    .column {
+      width: 48%;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 5px;
+    }
+    .column h2 {
+      margin-top: 0;
+      color: #7B68EE;
+    }
+    .btn {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      background-color: #7B68EE;
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    form { 
+      margin: 0; 
+    }
+    .user-info {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    OSH Investment - Management System
+    <div class="user-info">
+      Welcome, {{ current_user.username }}! | <a href="{{ url_for('auth.logout') }}" style="color: white;">Logout</a>
+    </div>
+  </div>
+  <div class="container">
+    <!-- Left Column: Actions -->
+    <div class="column">
+      <h2>Actions</h2>
+      <form action="{{ url_for('add_customer') }}" method="get">
+        <button type="submit" class="btn">Add New Customer</button>
+      </form>
+      <form action="{{ url_for('add_supplier') }}" method="get">
+        <button type="submit" class="btn">Add New Supplier</button>
+      </form>
+      <form action="{{ url_for('add_product') }}" method="get">
+        <button type="submit" class="btn">Add New Product</button>
+      </form>
+      <form action="{{ url_for('generate_invoice') }}" method="get">
+        <button type="submit" class="btn">Add New Invoice</button>
+      </form>
+      <form action="{{ url_for('edit_invoice') }}" method="get">
+        <button type="submit" class="btn">Edit Invoice</button>
+      </form>
+      <form action="{{ url_for('record_received') }}" method="get">
+        <button type="submit" class="btn">Add Received</button>
+      </form>
+      <!-- This button is always visible to allow user registration -->
+      {% if current_user.is_authenticated and current_user.admin %}
+      <form action="{{ url_for('auth.admin_login') }}" method="get">
+        <button type="submit" class="btn">Register User</button>
+      </form>
+      {% endif %}
+    </div>
+    
+    <!-- Right Column: Lists -->
+    <div class="column">
+        <h2>Lists</h2>
+        <form action="{{ url_for('list_customers') }}" method="get">
+            <button type="submit" class="btn">Customer List</button>
+        </form>
+      <form action="{{ url_for('list_suppliers') }}" method="get">
+          <button type="submit" class="btn">Supplier List</button>
+      </form>
+      <form action="{{ url_for('list_products') }}" method="get">
+          <button type="submit" class="btn">Product List</button>
+        </form>
+        <form action="{{ url_for('list_invoice_details') }}" method="get">
+            <button type="submit" class="btn">Invoice List</button>
+        </form>
+        <form action="{{ url_for('list_received') }}" method="get">
+            <button type="submit" class="btn">Received List</button>
+        </form>
+      <form action="{{ url_for('list_receivable') }}" method="get">
+          <button type="submit" class="btn">Receivable List</button>
+        </form>
+        <!-- New Manage Users button, visible only to admin users -->
+        {% if current_user.is_authenticated and current_user.admin %}
+        <form action="{{ url_for('auth.list_users') }}" method="get">
+          <button type="submit" class="btn">Manage Users</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

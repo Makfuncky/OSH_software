@@ -1,0 +1,52 @@
+<!-- templates/list_suppliers.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Suppliers List</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Suppliers List</h1>
+        <a href="{{ url_for('download_suppliers') }}" class="btn">Download CSV</a>
+        <a href="{{ url_for('upload_suppliers') }}" class="btn">Upload CSV</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Supplier S.No</th>
+                    <th>Supplier Name</th>
+                    <th>Contact Person</th>
+                    <th>Supplier Type</th>
+                    <th>Address</th>
+                    <th>Contact Number</th>
+                    {% if current_user.is_authenticated and current_user.admin %}
+                    <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for supplier in suppliers %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ supplier.supplier_s_no }}</td>
+                    <td>{{ supplier.supplier_name }}</td>
+                    <td>{{ supplier.contact_person }}</td>
+                    <td>{{ supplier.supplier_type }}</td>
+                    <td>{{ supplier.address }}</td>
+                    <td>{{ supplier.contact_number }}</td>
+                    {% if current_user.is_authenticated and current_user.admin %}
+                    <td>
+                        <form action="{{ url_for('delete_supplier', supplier_s_no=supplier.supplier_s_no) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this supplier?');">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>

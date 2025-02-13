@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice: {{ invoice.invoice_number }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Ensuring normal font */
+            padding: 20px;
+            margin: auto;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #fff;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 100%;
+        }
+        .header-right {
+            text-align: right;
+            margin-top: 10px;
+        }
+        .header-right h2, .header-right p {
+            margin: 0;
+            font-size: 16px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .th, .td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .th {
+            background-color: #f2f2f2;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .bank-info {
+            display: none;
+        }
+        /* .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+        } */
+        @media print {
+            .body, .container {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none;
+                background: none;
+                box-shadow: none;
+            }
+            .container {
+                padding: 0;
+                margin: 0;
+                align-content: center;
+            }
+            .customer-info {
+                margin: 0;
+                padding: 0;
+                font-size: 0.95rem;
+                line-height: 0.75rem;
+            }
+            .bank-info {
+                display: block;
+                position: relative;
+                margin-top: 2.5rem;
+                padding: 0;
+                font-size: 0.95rem;
+                line-height: 0.75rem;
+            }
+            .header img {
+                width: 97.5%;   
+            }
+            .header-right {
+                text-align: right;
+                position: relative;
+                right: 2.5rem;
+                top: 15 rem;
+            }
+            .table {
+                position: relative;
+                margin-left: 2rem;                   
+            }
+            .btn-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='OSH_Header.jpg') }}" alt="OSH Header">
+            <div class="header-right">
+                <h2>Invoice: {{ invoice.invoice_number }}</h2>
+                <p><strong>Date:</strong> {{ invoice.date }}</p>
+            </div>
+        </div>
+
+        <div class="customer-info">
+            <p><strong>Customer Name:</strong> {{ invoice.customer_name }}</p>
+            <p><strong>Address:</strong> {{ invoice.address }}</p>
+            <p><strong>Customer VAT No:</strong> {{ invoice.vat_no }}</p>
+            <p><strong>Customer PO No:</strong> {{ invoice.po_no }}</p>    
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Gr Amount</th>
+                    <th>VAT</th>
+                    <th>Net Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice['items'] %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.product_name }}</td>
+                    <td>{{ item.quantity | default(0) | round(2) }}</td>
+                    <td>{{ item.rate | default(0) | round(2) }}</td>
+                    <td>{{ item.gr_amount | default(0) | round(2) }}</td>
+                    <td>{{ item.vat | default(0) | round(2) }}</td>
+                    <td>{{ item.net_amount | default(0) | round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <!-- <tfoot>
+                <tr class="total-row">
+                    <td colspan="2">Total</td>
+                    <td>{{ invoice.total_quantity }}</td>
+                    <td></td>
+                    <td>{{ invoice.total_gross_amount }}</td>
+                    <td>{{ invoice.total_vat }}</td>
+                    <td>{{ invoice.total_net_amount }}</td>
+                </tr>
+            </tfoot> -->
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="2">Total</td>
+                    <td>{{ invoice.total_quantity }}</td>
+                    <td></td>
+                    <td>{{ invoice.total_gross_amount }}</td>
+                    <td>{{ invoice.total_vat }}</td>
+                    <td>{{ invoice.total_net_amount }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="bank-info">
+            <p><strong>PAMENT DETAILS:</strong> </p>
+            <p><strong>ACCOUNT No:</strong> 0464-0601-5014-0019</p>
+            <p><strong>BANK NAME:</strong> Bank Muscat, Al-Ansab Branch.</p>
+        </div>
+
+        <div class="btn-container">
+            <button onclick="window.print()" class="btn">Print Invoice</button>
+        </div>
+    </div>
+</body>
+</html>

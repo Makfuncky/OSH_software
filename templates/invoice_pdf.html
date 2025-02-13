@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Print Button Styling */
+        .print-button {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .print-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .print-button button:hover {
+            background-color: #45a049;
+        }
+
+        /* Tables Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        .label {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            width: 25%;
+        }
+
+        /* Products Table Specific Styling */
+        .products th, .products td {
+            text-align: center;
+        }
+
+        .total-row td {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            /* Adjust margins for smaller screens */
+            body {
+                margin: 10px;
+            }
+
+            /* Stack invoice and customer details */
+            .invoice-details, .customer-details, .payment-details {
+                display: block;
+                width: 100%;
+            }
+
+            .invoice-details td, 
+            .customer-details td, 
+            .payment-details td {
+                display: block;
+                width: 100%;
+            }
+
+            .label {
+                width: 100%;
+                background-color: #e9e9e9;
+            }
+
+            /* Make products table horizontally scrollable */
+            .products-container {
+                overflow-x: auto;
+            }
+
+            .products th, .products td {
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Further adjustments for very small screens */
+            .print-button button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            th, td {
+                padding: 6px;
+                font-size: 14px;
+            }
+
+            .header img {
+                max-height: 100px;
+            }
+        }
+
+        /* Hide Print Button when printing */
+        @media print {
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Print Button -->
+    <div class="print-button">
+        <button onclick="window.print()">Print Invoice</button>
+    </div>
+
+    <!-- Header with Image (replace with your own header/logo image) -->
+    <div class="header">
+        <img src="OSH_header.jpg" alt="Company Header">
+    </div>
+
+    <!-- Invoice Details -->
+    <table class="invoice-details">
+        <tr>
+            <td class="label">Date:</td>
+            <td id="invoice-date">2025-01-30</td>
+            <td class="label">Invoice Number:</td>
+            <td id="invoice-number">INV-1001</td>
+        </tr>
+    </table>
+
+    <!-- Customer Information -->
+    <table class="customer-details">
+        <tr>
+            <td class="label">Customer Name:</td>
+            <td id="customer-name">John Doe</td>
+            <td class="label">Customer VAT No:</td>
+            <td id="customer-vat">VAT123456</td>
+        </tr>
+        <tr>
+            <td class="label">Address:</td>
+            <td id="customer-address" colspan="3">1234 Elm Street, Springfield, USA</td>
+        </tr>
+        <tr>
+            <td class="label">Customer PO No:</td>
+            <td id="customer-po">PO-7890</td>
+            <td class="label"></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <!-- Products Table -->
+    <div class="products-container">
+        <table class="products">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Gr Amount</th>
+                    <th>VAT</th>
+                    <th>Net Amount</th>
+                </tr>
+            </thead>
+            <tbody id="products-body">
+                <!-- Example Product Row -->
+                <tr>
+                    <td>1</td>
+                    <td>Product A</td>
+                    <td>2</td>
+                    <td>50.00</td>
+                    <td>100.00</td>
+                    <td>10.00</td>
+                    <td>110.00</td>
+                </tr>
+            </tbody>
+            <!-- Total Row -->
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="2">Total</td>
+                    <td id="total-quantity">2</td>
+                    <td></td>
+                    <td id="total-gr-amount">100.000</td>
+                    <td id="total-vat">10.000</td>
+                    <td id="total-net-amount">110.000</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Payment Details (Static or Dynamic) -->
+    <table class="payment-details">
+        <tr>
+            <td class="label">Account Number:</td>
+            <td id="account-number">123456789</td>
+            <td class="label">Bank:</td>
+            <td id="bank-name">ABC Bank</td>
+        </tr>
+        <tr>
+            <td class="label">Branch:</td>
+            <td id="branch-name">Main Branch</td>
+            <td class="label"></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <!-- Optional JavaScript for Dynamic Population -->
+    <script>
+        // Example invoice data. This could come from your Flask endpoint or any other source.
+        const invoiceData = {
+            "Date": "2025-01-30",
+            "Invoice Number": "INV-1001",
+            "Customer Name": "John Doe",
+            "Address": "1234 Elm Street, Springfield, USA",
+            "Customer VAT No": "VAT123456",
+            "Customer PO No": "PO-7890",
+            "Products": [
+                {
+                    "Product Name": "Product A",
+                    "Quantity": 2,
+                    "Rate": "50.00",
+                    "Gr Amount": "100.00",
+                    "VAT": "10.00",
+                    "Net Amount": "110.00"
+                }
+                // ... Add more products if needed
+            ],
+            // These fields could be static or also provided by the server if you wish
+            "Account Number": "123456789",
+            "Bank": "ABC Bank",
+            "Branch": "Main Branch"
+        };
+
+        // Function to populate invoice data into the DOM
+        function populateInvoice(data) {
+            // Invoice Details
+            document.getElementById('invoice-date').textContent = data.Date;
+            document.getElementById('invoice-number').textContent = data['Invoice Number'];
+
+            // Customer Details
+            document.getElementById('customer-name').textContent = data['Customer Name'];
+            document.getElementById('customer-address').textContent = data.Address;
+            document.getElementById('customer-vat').textContent = data['Customer VAT No'];
+            document.getElementById('customer-po').textContent = data['Customer PO No'];
+
+            // Products Table
+            const productsBody = document.getElementById('products-body');
+            productsBody.innerHTML = ''; // clear any existing rows
+            let totalQuantity = 0;
+            let totalGrAmount = 0;
+            let totalVat = 0;
+            let totalNetAmount = 0;
+
+            data.Products.forEach((product, index) => {
+                const row = document.createElement('tr');
+
+                const cellSNo = document.createElement('td');
+                cellSNo.textContent = index + 1;
+                row.appendChild(cellSNo);
+
+                const cellName = document.createElement('td');
+                cellName.textContent = product['Product Name'];
+                row.appendChild(cellName);
+
+                const cellQty = document.createElement('td');
+                cellQty.textContent = product['Quantity'];
+                row.appendChild(cellQty);
+
+                const cellRate = document.createElement('td');
+                cellRate.textContent = product['Rate'];
+                row.appendChild(cellRate);
+
+                const cellGrAmount = document.createElement('td');
+                cellGrAmount.textContent = product['Gr Amount'];
+                row.appendChild(cellGrAmount);
+
+                const cellVat = document.createElement('td');
+                cellVat.textContent = product['VAT'];
+                row.appendChild(cellVat);
+
+                const cellNet = document.createElement('td');
+                cellNet.textContent = product['Net Amount'];
+                row.appendChild(cellNet);
+
+                productsBody.appendChild(row);
+
+                // Calculate totals
+                totalQuantity += product['Quantity'];
+                totalGrAmount += parseFloat(product['Gr Amount']);
+                totalVat += parseFloat(product['VAT']);
+                totalNetAmount += parseFloat(product['Net Amount']);
+            });
+
+            // Populate Totals
+            document.getElementById('total-quantity').textContent = totalQuantity;
+            document.getElementById('total-gr-amount').textContent = totalGrAmount.toFixed(3);
+            document.getElementById('total-vat').textContent = totalVat.toFixed(3);
+            document.getElementById('total-net-amount').textContent = totalNetAmount.toFixed(3);
+
+            // Payment Details
+            document.getElementById('account-number').textContent = data['Account Number'];
+            document.getElementById('bank-name').textContent = data.Bank;
+            document.getElementById('branch-name').textContent = data.Branch;
+        }
+
+        // Populate the invoice on page load
+        window.onload = function() {
+            populateInvoice(invoiceData);
+        };
+    </script>
+
+</body>
+</html>

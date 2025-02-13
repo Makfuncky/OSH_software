@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Record Received Payment</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    .container { max-width: 900px; margin: auto; }
+    .btn { padding: 8px 12px; background: #7B68EE; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    label { display: block; margin-top: 10px; }
+    input[type="text"], input[type="date"], select { width: 100%; padding: 8px; margin-top: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table, th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    tfoot td { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Record Received Payment</h1>
+    <form method="POST">
+      <!-- Payment Summary -->
+      <label for="bank_name">Bank Name:</label>
+      <select name="bank_name" id="bank_name" required>
+        <option value="Bank Muscat">Bank Muscat</option>
+        <option value="Alizz Islamic Bank">Alizz Islamic Bank</option>
+        <option value="HDFC">HDFC</option>
+      </select>
+      
+      <label for="recieved_amount">Received Amount:</label>
+      <input type="text" name="recieved_amount" id="recieved_amount" required>
+      
+      <label for="received_date">Received Date:</label>
+      <input type="date" name="received_date" id="received_date" required>
+      
+      <label for="transaction_type">Transaction Type:</label>
+      <select name="transaction_type" id="transaction_type" required>
+        <option value="Cash Deposit">Cash Deposit</option>
+        <option value="Cash in Hand">Cash in Hand</option>
+        <option value="Online Transfer">Online Transfer</option>
+        <option value="Cheque">Cheque</option>
+      </select>
+      
+      <!-- Cheque Details: Shown only if Cheque is selected -->
+      <div id="cheque_details_div" style="display:none;">
+        <label for="cheque_details">Cheque Details:</label>
+        <input type="text" name="cheque_details" id="cheque_details">
+      </div>
+      
+      <h2>Allocate Payment to Invoices</h2>
+      <!-- Allocation Table -->
+      <table id="allocation_table">
+        <thead>
+          <tr>
+            <th>Invoice Number</th>
+            <th>Customer Name</th>
+            <th>Remaining Amount</th>
+            <th>Amount Against Invoice</th>
+            <th>Comments</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <select name="invoice_number" class="invoice_select">
+                <option value="">Select Invoice</option>
+                {% for inv in open_invoices %}
+                <option value="{{ inv.invoice_number }}" data-customer="{{ inv.customer_name }}" data-remaining="{{ inv.remaining }}">
+                  {{ inv.invoice_number }}
+                </option>
+                {% endfor %}
+              </select>
+            </td>
+            <td class="customer_cell"></td>
+            <td class="remaining_cell"></td>
+            <td><input type="text" name="amount_againts_invoice" class="allocated_input" value="0"></td>
+            <td><input type="text" name="comments" class="comment_input"></td>
+            <td><button type="button" class="btn remove_row">Remove</button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Total Allocated:</td>
+            <td id="total_allocated">0.00</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <button type="button" id="add_row" class="btn">Add Invoice Row</button>
+      <br><br>
+      <button type="submit" class="btn">Record Payment</button>
+    </form>
+    <br>
+    <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+  </div>
+  
+  <script>
+    // Show/hide cheque details based on transaction type.
+    document.getElementById('transaction_type').addEventListener('change', function() {
+      if (this.value === "Cheque") {
+        document.getElementById('cheque_details_div').style.display = 'block';
+      } else {
+        document.getElementById('cheque_details_div').style.display = 'none';
+      }
+    });
+    
+    // Update row details (customer name and remaining amount) when an invoice is selected.
+    function updateRow(row) {
+      var select = row.querySelector('.invoice_select');
+      var selectedOption = select.options[select.selectedIndex];
+      var customer = selectedOption.getAttribute('data-customer') || "";
+      var remaining = selectedOption.getAttribute('data-remaining') || "";
+      row.querySelector('.customer_cell').textContent = customer;
+      row.querySelector('.remaining_cell').textContent = remaining;
+    }
+    
+    // Update total allocated amount.
+    function updateTotal() {
+      var total = 0;
+      document.querySelectorAll('.allocated_input').forEach(function(input) {
+        var val = parseFloat(input.value) || 0;
+        total += val;
+      });
+      document.getElementById('total_allocated').textContent = total.toFixed(2);
+    }
+    
+    // Attach event listeners to the first row.
+    document.querySelector('.invoice_select').addEventListener('change', function() {
+      updateRow(this.closest('tr'));
+    });
+    document.querySelector('.allocated_input').addEventListener('input', updateTotal);
+    
+    // Add new row functionality.
+    document.getElementById('add_row').addEventListener('click', function() {
+      var tbody = document.querySelector('#allocation_table tbody');
+      var newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>
+          <select name="invoice_number" class="invoice_select">
+            <option value="">Select Invoice</option>
+            {% for inv in open_invoices %}
+            <option value="{{ inv.invoice_number }}" data-customer="{{ inv.customer_name }}" data-remaining="{{ inv.remaining }}">
+              {{ inv.invoice_number }}
+            </option>
+            {% endfor %}
+          </select>
+        </td>
+        <td class="customer_cell"></td>
+        <td class="remaining_cell"></td>
+        <td><input type="text" name="amount_againts_invoice" class="allocated_input" value="0"></td>
+        <td><input type="text" name="comments" class="comment_input"></td>
+        <td><button type="button" class="btn remove_row">Remove</button></td>
+      `;
+      tbody.appendChild(newRow);
+      newRow.querySelector('.invoice_select').addEventListener('change', function() {
+        updateRow(newRow);
+      });
+      newRow.querySelector('.allocated_input').addEventListener('input', updateTotal);
+      newRow.querySelector('.remove_row').addEventListener('click', function() {
+        newRow.remove();
+        updateTotal();
+      });
+    });
+    
+    // Attach remove event to any existing "Remove" buttons.
+    document.querySelectorAll('.remove_row').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        btn.closest('tr').remove();
+        updateTotal();
+      });
+    });
+    
+    // On DOMContentLoaded, update all rows to display remaining amounts.
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.invoice_select').forEach(function(select) {
+        updateRow(select.closest('tr'));
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Invoice</title>
+    <!-- Link to your CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Invoice</h1>
+        
+        <!-- Single form for the entire invoice -->
+        <form method="POST" action="{{ url_for('generate_invoice') }}">
+            
+            <!-- Invoice Date and Number -->
+            <label for="date">Date:</label>
+            <input type="text"
+                   id="date"
+                   name="date"
+                   value="{{ datetime.now().strftime('%d-%b-%y') }}"
+                   readonly><br>
+
+            <label for="invoice_number">Invoice Number:</label>
+            <input type="text"
+                   id="invoice_number"
+                   name="invoice_number"
+                   value="{{ new_invoice_number }}"
+                   readonly><br>
+
+            <!-- Customer Selection -->
+            <label for="customer_name">Customer Name:</label>
+            <select id="customer_name" name="customer_name" onchange="updateCustomerDetails()">
+                {% for name in customer_names %}
+                    <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select><br>
+
+            <!-- Customer Address, VAT, PO -->
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" readonly><br>
+
+            <label for="vat_no">Customer VAT No:</label>
+            <input type="text" id="vat_no" name="vat_no" readonly><br>
+
+            <label for="po_no">Customer PO No:</label>
+            <input type="text" id="po_no" name="po_no"><br>
+
+            <!-- Products Section -->
+            <h3>Products</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Gr Amount</th>
+                        <th>VAT</th>
+                        <th>Net Amount</th>
+                        <th>Add</th>
+                    </tr>
+                </thead>
+                <tbody id="product_rows">
+                    <tr>
+                        <td>
+                            <select id="product_name_0" name="product_name_0" onchange="updateProductDetails(0)">
+                                {% for name in product_names | unique %}
+                                    <option value="{{ name }}">{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number"
+                                   id="quantity_0"
+                                   name="quantity_0"
+                                   value="0"
+                                   onchange="updateProductDetails(0)">
+                        </td>
+                        <td>
+                            <input type="number"
+                                   step="0.01"
+                                   id="rate_0"
+                                   name="rate_0"
+                                   value="0.00"
+                                   onchange="updateProductDetails(0)">
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="gr_amount_0"
+                                   name="gr_amount_0"
+                                   value="0.000"
+                                   readonly>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="vat_0"
+                                   name="vat_0"
+                                   value="0.000"
+                                   readonly>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="net_amount_0"
+                                   name="net_amount_0"
+                                   value="0.000"
+                                   readonly>
+                        </td>
+                        <td>
+                            <button type="button" class="btn" onclick="addProductRow()">Add</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><b>Totals:</b></td>
+                        <td>
+                            <input type="text"
+                                   id="total_gr_amount"
+                                   name="total_gr_amount"
+                                   value="0.000"
+                                   readonly>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="total_vat"
+                                   name="total_vat"
+                                   value="0.000"
+                                   readonly>
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="total_net_amount"
+                                   name="total_net_amount"
+                                   value="0.000"
+                                   readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <!-- Keep track of how many product rows we have (start at 0 if we only have index 0) -->
+            <input type="hidden" id="product_count" name="product_count" value="0">
+
+            <!-- Submit button to generate the invoice -->
+            <button type="submit" class="btn">Generate Invoice</button>
+        </form>
+
+        <!-- Optional: Link back to Home -->
+        <br>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+
+    <script>
+        // Convert Python data to JavaScript objects
+        const customers = JSON.parse('{{ customers | tojson | safe }}');
+        const products = JSON.parse('{{ products | tojson | safe }}');
+
+        function updateCustomerDetails() {
+            const customerName = document.getElementById('customer_name').value;
+            const customer = customers.find(c => c.name === customerName);
+
+            if (customer) {
+                document.getElementById('address').value = customer.address;
+                document.getElementById('vat_no').value = customer.vat_no;
+                document.getElementById('po_no').value = customer.po_no;
+            }
+        }
+
+        function updateProductDetails(index) {
+            const productName = document.getElementById(`product_name_${index}`).value;
+            const quantity = parseFloat(document.getElementById(`quantity_${index}`).value) || 0;
+            const rate = parseFloat(document.getElementById(`rate_${index}`).value) || 0;
+            const product = products.find(p => p.name === productName);
+
+            if (product) {
+                const grAmount = quantity * rate;
+                // Example: 5% VAT if product.vat_check === 'Yes'
+                const vat = (product.vat_check === 'Yes') ? (grAmount * 0.05) : 0;
+                const netAmount = grAmount + vat;
+
+                document.getElementById(`gr_amount_${index}`).value = grAmount.toFixed(3);
+                document.getElementById(`vat_${index}`).value = vat.toFixed(3);
+                document.getElementById(`net_amount_${index}`).value = netAmount.toFixed(3);
+
+                updateTotal();
+            }
+        }
+
+        function addProductRow() {
+            const productCountEl = document.getElementById('product_count');
+            const count = parseInt(productCountEl.value);
+            const newCount = count + 1;
+            productCountEl.value = newCount;
+
+            // Build a new row for the products table
+            const newRow = `
+                <tr>
+                    <td>
+                        <select id="product_name_${newCount}" name="product_name_${newCount}" onchange="updateProductDetails(${newCount})">
+                            {% for name in product_names %}
+                                <option value="{{ name }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" id="quantity_${newCount}" name="quantity_${newCount}" value="0" onchange="updateProductDetails(${newCount})">
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" id="rate_${newCount}" name="rate_${newCount}" value="0.00" onchange="updateProductDetails(${newCount})">
+                    </td>
+                    <td>
+                        <input type="text" id="gr_amount_${newCount}" name="gr_amount_${newCount}" value="0.000" readonly>
+                    </td>
+                    <td>
+                        <input type="text" id="vat_${newCount}" name="vat_${newCount}" value="0.000" readonly>
+                    </td>
+                    <td>
+                        <input type="text" id="net_amount_${newCount}" name="net_amount_${newCount}" value="0.000" readonly>
+                    </td>
+                    <td>
+                        <button type="button" class="btn" onclick="addProductRow()">Add</button>
+                    </td>
+                </tr>
+            `;
+
+            document.getElementById('product_rows').insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function updateTotal() {
+            const productCount = parseInt(document.getElementById('product_count').value);
+            let totalGrAmount = 0;
+            let totalVat = 0;
+            let totalNetAmount = 0;
+
+            // Loop from 0..productCount, inclusive, because we start at 0 row
+            for (let i = 0; i <= productCount; i++) {
+                const gr = parseFloat(document.getElementById(`gr_amount_${i}`).value) || 0;
+                const vat = parseFloat(document.getElementById(`vat_${i}`).value) || 0;
+                const net = parseFloat(document.getElementById(`net_amount_${i}`).value) || 0;
+
+                totalGrAmount += gr;
+                totalVat += vat;
+                totalNetAmount += net;
+            }
+
+            document.getElementById('total_gr_amount').value = totalGrAmount.toFixed(3);
+            document.getElementById('total_vat').value = totalVat.toFixed(3);
+            document.getElementById('total_net_amount').value = totalNetAmount.toFixed(3);
+        }
+
+        // On page load, set initial customer details for the default selection
+        updateCustomerDetails();
+    </script>
+</body>
+</html>

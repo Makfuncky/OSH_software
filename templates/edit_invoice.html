@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Invoice</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Invoice</h1>
+
+        <!-- Form to load an invoice by its number -->
+        <form method="POST" action="{{ url_for('edit_invoice') }}">
+            <label for="invoice_number">Enter Invoice Number:</label>
+            <input type="text" id="invoice_number" name="invoice_number" required>
+            <button type="submit" name="load_invoice" class="btn">Load Invoice</button>
+        </form>
+
+        {% if invoice %}
+        <!-- Hidden field to track the invoice ID -->
+        <input type="hidden" name="id" value="{{ invoice.id }}">
+
+        <!-- Displaying the invoice number -->
+        <h3>Invoice Number: {{ invoice.invoice_number }}</h3>
+
+        <!-- Hidden fields for ID and Invoice Number -->
+        <form method="POST" action="{{ url_for('update_invoice') }}">
+            <input type="hidden" name="id" value="{{ invoice.id }}">
+            <input type="hidden" name="invoice_number" value="{{ invoice.invoice_number }}">
+
+            <label for="date">Date:</label>
+            <input type="text" id="date" name="date" value="{{ invoice.date }}" readonly><br>
+
+            <!-- Dropdown to select customer -->
+            <label for="customer_name">Customer Name:</label>
+            <select id="customer_name" name="customer_name" onchange="updateCustomerDetails()">
+                {% for customer in customers %}
+                    <option value="{{ customer.customer_name }}" {% if customer.customer_name == invoice.customer_name %}selected{% endif %}>{{ customer.customer_name }}</option>
+                {% endfor %}
+            </select><br>
+
+            <!-- Fields for customer details -->
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" value="{{ invoice.address }}"><br>
+
+            <label for="vat_no">Customer VAT No:</label>
+            <input type="text" id="vat_no" name="vat_no" value="{{ invoice.vat_no }}"><br>
+
+            <label for="po_no">Customer PO No:</label>
+            <input type="text" id="po_no" name="po_no" value="{{ invoice.po_no }}"><br>
+
+            <h3>Products</h3>
+            <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Gr Amount</th>
+                        <th>VAT</th>
+                        <th>Net Amount</th>
+                        <th>Add</th>
+                    </tr>
+                </thead>
+                <tbody id="product_rows">
+                    {% for item in invoice['items'] %}
+                    <tr>
+                        <!-- Dropdown to select product (unique list) -->
+                        <td>
+                            <select name="product_name_{{ loop.index }}" onchange="updateRow('{{ loop.index }}')">
+                                {% for name in (products|map(attribute='product_name')|unique) %}
+                                    {% if name %}
+                                        <option value="{{ name }}" {% if name == item.product_name %}selected{% endif %}>{{ name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <!-- Inputs for product details -->
+                        <td><input type="number" name="quantity_{{ loop.index }}" value="{{ item.quantity }}" onchange="updateRow('{{ loop.index }}')"></td>
+                        <td><input type="number" step="0.01" name="rate_{{ loop.index }}" value="{{ item.rate }}" onchange="updateRow('{{ loop.index }}')"></td>
+                        <td><input type="text" name="gr_amount_{{ loop.index }}" value="{{ item.gr_amount }}" readonly></td>
+                        <td><input type="text" name="vat_{{ loop.index }}" value="{{ item.vat }}" readonly></td>
+                        <td><input type="text" name="net_amount_{{ loop.index }}" value="{{ item.net_amount }}" readonly></td>
+                        <td><button type="button" class="btn" onclick="addProductRow()">Add</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <!-- Displaying totals -->
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><b>Totals:</b></td>
+                        <td><input type="text" id="total_gr_amount" name="total_gr_amount" readonly></td>
+                        <td><input type="text" id="total_vat" name="total_vat" readonly></td>
+                        <td><input type="text" id="total_net_amount" name="total_net_amount" readonly></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+            <!-- Keep track of how many product rows there are -->
+            <input type="hidden" id="product_count" name="product_count" value="{{ invoice['items']|length - 1 }}">
+            <button type="submit" class="btn">Save Invoice</button>
+        </form>
+        {% endif %}
+
+        <br>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+
+    <script>
+        // Parse customers and products data passed from backend
+        const customers = JSON.parse('{{ customers | tojson | safe }}');
+        const products = JSON.parse('{{ products | tojson | safe }}');
+
+        // Function to update customer details when a new customer is selected
+        window.updateCustomerDetails = function () {
+            const customerName = document.getElementById('customer_name').value;
+            const customer = customers.find(c => c.customer_name === customerName);
+            if (customer) {
+                document.getElementById('address').value = customer.address || '';
+                document.getElementById('vat_no').value = customer.vat_no || '';
+                document.getElementById('po_no').value = customer.po_no || '';
+            }
+        };
+
+        // Function to update a product row's calculated values
+        function updateRow(index) {
+            const quantity = parseFloat(document.querySelector(`[name='quantity_${index}']`).value) || 0;
+            const rate = parseFloat(document.querySelector(`[name='rate_${index}']`).value) || 0;
+            const grAmount = quantity * rate;
+            const productName = document.querySelector(`[name='product_name_${index}']`).value;
+            // Find the product from the products array
+            const product = products.find(p => p.product_name === productName);
+            // Calculate VAT only if product.vat_check is "yes"
+            let vat = 0;
+            if (product && product.vat_check && product.vat_check.toLowerCase() === 'yes') {
+                vat = grAmount * 0.05;
+            }
+            const netAmount = grAmount + vat;
+
+            document.querySelector(`[name='gr_amount_${index}']`).value = grAmount.toFixed(2);
+            document.querySelector(`[name='vat_${index}']`).value = vat.toFixed(2);
+            document.querySelector(`[name='net_amount_${index}']`).value = netAmount.toFixed(2);
+
+            updateTotals();
+        }
+
+        // Function to update totals for all product rows
+        function updateTotals() {
+            let totalGrAmount = 0, totalVat = 0, totalNetAmount = 0;
+            const rows = document.querySelectorAll('#product_rows tr');
+            rows.forEach((row, i) => {
+                const idx = i + 1;
+                totalGrAmount += parseFloat(document.querySelector(`[name='gr_amount_${idx}']`).value) || 0;
+                totalVat += parseFloat(document.querySelector(`[name='vat_${idx}']`).value) || 0;
+                totalNetAmount += parseFloat(document.querySelector(`[name='net_amount_${idx}']`).value) || 0;
+            });
+            document.getElementById('total_gr_amount').value = totalGrAmount.toFixed(2);
+            document.getElementById('total_vat').value = totalVat.toFixed(2);
+            document.getElementById('total_net_amount').value = totalNetAmount.toFixed(2);
+        }
+
+        // Function to add a new product row dynamically
+        function addProductRow() {
+            const productRows = document.getElementById('product_rows');
+            const index = productRows.rows.length + 1;
+            const newRow = `
+                <tr>
+                    <td>
+                        <select name="product_name_${index}" onchange="updateRow(${index})">
+                            {% set unique_products = products|map(attribute='product_name')|unique %}
+                            {% for name in unique_products %}
+                                {% if name %}
+                                    <option value="{{ name }}">{{ name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input type="number" name="quantity_${index}" value="0" onchange="updateRow(${index})"></td>
+                    <td><input type="number" step="0.01" name="rate_${index}" value="0.00" onchange="updateRow(${index})"></td>
+                    <td><input type="text" name="gr_amount_${index}" value="0.00" readonly></td>
+                    <td><input type="text" name="vat_${index}" value="0.00" readonly></td>
+                    <td><input type="text" name="net_amount_${index}" value="0.00" readonly></td>
+                    <td><button type="button" class="btn" onclick="addProductRow()">Add</button></td>
+                </tr>
+            `;
+            productRows.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Recalculate totals on page load.
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTotals();
+        });
+    </script>
+</body>
+</html>

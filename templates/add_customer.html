@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Customer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Customer</h1>
+        <form method="POST">
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Input</th>
+                </tr>
+                <tr>
+                    <td><label for="customer_s_no">Customer S.No:</label></td>
+                    <td>
+                        <input type="text" id="customer_s_no" name="customer_s_no" value="{{ new_customer_number }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="customer_name">Customer Name:</label></td>
+                    <td><input type="text" id="customer_name" name="customer_name"></td>
+                </tr>
+                <tr>
+                    <td><label for="sales_person">Sales Person:</label></td>
+                    <td>
+                        <select id="sales_person" name="sales_person">
+                            {% for person in sale_persons %}
+                                <option value="{{ person }}">{{ person }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="address">Address:</label></td>
+                    <td><input type="text" id="address" name="address"></td>
+                </tr>
+                <tr>
+                    <td><label for="vat_no">VAT No:</label></td>
+                    <td><input type="text" id="vat_no" name="vat_no"></td>
+                </tr>
+                <tr>
+                    <td><label for="credit_term">Credit Term:</label></td>
+                    <td><input type="text" id="credit_term" name="credit_term"></td>
+                </tr>
+                <tr>
+                    <td><label for="contact_person">Contact Person:</label></td>
+                    <td><input type="text" id="contact_person" name="contact_person"></td>
+                </tr>
+                <tr>
+                    <td><label for="contact_number">Contact Number:</label></td>
+                    <td><input type="text" id="contact_number" name="contact_number"></td>
+                </tr>
+                <tr>
+                    <td><label for="company_registration_no">Company Registration No:</label></td>
+                    <td><input type="text" id="company_registration_no" name="company_registration_no"></td>
+                </tr>
+            </table>
+            <button type="submit" class="btn">Save Customer</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>
