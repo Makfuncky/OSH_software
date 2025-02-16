@@ -10,5 +10,11 @@
         "username": "Muhammad Ather",
         "password_hash": "scrypt:32768:8:1$uuNTn9qOModumai2$7099e6528973a2f7e72fa5d1edd11b661d146cf4edf9c56990de6042c489a595162a2cb524853c8290c054129af5266b4fab90abb6b842d01096255be42a46cf",
         "admin": true
+    },
+    {
+        "id": "3",
+        "username": "shayanomer",
+        "password_hash": "scrypt:32768:8:1$BrHfAiHlrFW6QoEm$3857bfc088fbfb7874b5109f8aded31fd1ac3ed6c08b4f35bd94f63b90bee858f5bca4650b68ad74ff4fe13a2def0178f3e4efec734b2fea9752855a91a255d5",
+        "admin": true
     }
 ]
