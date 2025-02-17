@@ -15,181 +15,194 @@
   </style>
 </head>
 <body>
-  <div class="container">
-      <h1>Add or Update Product</h1>
-      <form method="POST" action="{{ url_for('add_product') }}">
-        <!-- Toggle for product type (inside the form) -->
-        <div class="toggle-container">
-            <label>
-                <input type="radio" name="product_type" value="existing" checked> Existing Product
-            </label>
-            <label>
-                <input type="radio" name="product_type" value="new"> New Product
-            </label>
-        </div>
-          <table>
-              <!-- Product S.No (read-only) -->
-              <tr>
-                  <td><label for="product_s_no">Product S.No:</label></td>
-                  <td>
-                      <input type="text" id="product_s_no" name="product_s_no" value="" readonly>
-                  </td>
-              </tr>
-              <!-- Product Name: Existing Product Dropdown -->
-              <tr id="existing_product_row">
-                  <td><label for="existing_product_name">Product Name:</label></td>
-                  <td>
-                      <select id="existing_product_name" name="existing_product_name">
-                          {% for product in existing_products %}
-                              {% set display_name = product.product_name|trim if product.product_name|trim != "" else product.product_s_no %}
-                              <option value="{{ display_name }}" data-sno="{{ product.product_s_no }}">
-                                  {{ display_name }}
-                              </option>
-                          {% endfor %}
-                      </select>
-                  </td>
-              </tr>
-              <!-- Product Name: New Product Text Input (hidden by default) -->
-              <tr id="new_product_row" style="display: none;">
-                  <td><label for="new_product_name">Product Name:</label></td>
-                  <td>
-                      <input type="text" id="new_product_name" name="new_product_name" placeholder="Enter new product name">
-                  </td>
-              </tr>
-              <!-- Other Fields -->
-              <tr>
-                  <td><label for="rate">Rate:</label></td>
-                  <td><input type="text" id="rate" name="rate"></td>
-              </tr>
-              <tr>
-                  <td><label for="vat_check">VAT Check:</label></td>
-                  <td><input type="checkbox" id="vat_check" name="vat_check"></td>
-              </tr>
-              <tr>
-                  <td><label for="declaration_number">Declaration Number:</label></td>
-                  <td><input type="text" id="declaration_number" name="declaration_number"></td>
-              </tr>
-              <tr>
-                  <td><label for="release_date">Release Date:</label></td>
-                  <td><input type="date" id="release_date" name="release_date" value="{{ datetime.now().strftime('%Y-%m-%d') }}"></td>
-              </tr>
-              <tr>
-                  <td><label for="quantity">Quantity:</label></td>
-                  <td><input type="text" id="quantity" name="quantity"></td>
-              </tr>
-              <tr>
-                  <td><label for="customs_duty">Customs Duty:</label></td>
-                  <td><input type="text" id="customs_duty" name="customs_duty"></td>
-              </tr>
-              <tr>
-                  <td><label for="vat_value">VAT Value:</label></td>
-                  <td><input type="text" id="vat_value" name="vat_value"></td>
-              </tr>
-              <tr>
-                  <td><label for="other_cost">Other Cost:</label></td>
-                  <td><input type="text" id="other_cost" name="other_cost"></td>
-              </tr>
-              <tr>
-                  <td><label for="declared_value">Declared Value:</label></td>
-                  <td><input type="text" id="declared_value" name="declared_value"></td>
-              </tr>
-              <tr>
-                  <td><label for="supplier_name">Supplier Name:</label></td>
-                  <td>
-                      <select id="supplier_name" name="supplier_name">
-                          {% for name in purchase_suppliers %}
-                              <option value="{{ name }}">{{ name }}</option>
-                          {% endfor %}
-                      </select>
-                  </td>
-              </tr>
-              <tr>
-                  <td><label for="supplier_invoice_no">Supplier Invoice No:</label></td>
-                  <td><input type="text" id="supplier_invoice_no" name="supplier_invoice_no"></td>
-              </tr>
-              <tr>
-                  <td><label for="country">Country:</label></td>
-                  <td><input type="text" id="country" name="country"></td>
-              </tr>
-              <tr>
-                  <td><label for="invoice_date">Invoice Date:</label></td>
-                  <td><input type="date" id="invoice_date" name="invoice_date" value="{{ datetime.now().strftime('%Y-%m-%d') }}"></td>
-              </tr>
-              <tr>
-                  <td><label for="invoice_value">Invoice Value:</label></td>
-                  <td><input type="text" id="invoice_value" name="invoice_value"></td>
-              </tr>
-              <tr>
-                  <td><label for="shipping_agent_name">Shipping Agent Name:</label></td>
-                  <td>
-                      <select id="shipping_agent_name" name="shipping_agent_name">
-                          {% for name in shipping_suppliers %}
-                              <option value="{{ name }}">{{ name }}</option>
-                          {% endfor %}
-                      </select>
-                  </td>
-              </tr>
-              <tr>
-                  <td><label for="shipping_invoice_no">Shipping Invoice No:</label></td>
-                  <td><input type="text" id="shipping_invoice_no" name="shipping_invoice_no"></td>
-              </tr>
-              <tr>
-                  <td><label for="shipping_invoice_date">Shipping Invoice Date:</label></td>
-                  <td><input type="date" id="shipping_invoice_date" name="shipping_invoice_date" value="{{ datetime.now().strftime('%Y-%m-%d') }}"></td>
-              </tr>
-              <tr>
-                  <td><label for="shipping_invoice_value">Shipping Invoice Value:</label></td>
-                  <td><input type="text" id="shipping_invoice_value" name="shipping_invoice_value"></td>
-              </tr>
-          </table>
-          <button type="submit" class="btn">Save Product</button>
-      </form>
-      <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
-  </div>
+    <div class="container">
+            <h1>Add or Update Product</h1>
+            <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
+        
+            <form method="POST" action="{{ url_for('add_product') }}">
+                <!-- Toggle for product type (inside the form) -->
+                <div class="toggle-container">
+                        <label>
+                                <input type="radio" name="product_type" value="existing" checked> Existing Product
+                        </label>
+                        <label>
+                                <input type="radio" name="product_type" value="new"> New Product
+                        </label>
+                </div>
+                    <table>
+                            <!-- Product S.No (read-only) -->
+                            <tr>
+                                    <td><label for="product_s_no">Product S.No:</label></td>
+                                    <td>
+                                            <input type="text" id="product_s_no" name="product_s_no" value="" readonly>
+                                    </td>
+                            </tr>
+                            <!-- Product Name: Existing Product Dropdown -->
+                            <tr id="existing_product_row">
+                                    <td><label for="existing_product_name">Product Name:</label></td>
+                                    <td>
+                                            <select id="existing_product_name" name="existing_product_name">
+                                                    {% for product in existing_products %}
+                                                            {% set display_name = product.product_name|trim if product.product_name|trim != "" else product.product_s_no %}
+                                                            <option value="{{ display_name }}" data-sno="{{ product.product_s_no }}">
+                                                                    {{ display_name }}
+                                                            </option>
+                                                    {% endfor %}
+                                            </select>
+                                    </td>
+                            </tr>
+                            <!-- Product Name: New Product Text Input (hidden by default) -->
+                            <tr id="new_product_row" style="display: none;">
+                                    <td><label for="new_product_name">Product Name:</label></td>
+                                    <td>
+                                            <input type="text" id="new_product_name" name="new_product_name" placeholder="Enter new product name">
+                                    </td>
+                            </tr>
+                            <!-- Other Fields -->
+                            <tr>
+                                    <td><label for="rate">Rate:</label></td>
+                                    <td><input type="text" id="rate" name="rate" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="vat_check">VAT Check:</label></td>
+                                    <td><input type="checkbox" id="vat_check" name="vat_check"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="declaration_number">Declaration Number:</label></td>
+                                    <td><input type="text" id="declaration_number" name="declaration_number"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="release_date">Release Date:</label></td>
+                                    <td><input type="date" id="release_date" name="release_date" value="{{ datetime.now().strftime('%Y-%m-%d') }}"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="quantity">Quantity:</label></td>
+                                    <td><input type="text" id="quantity" name="quantity" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="customs_duty">Customs Duty:</label></td>
+                                    <td><input type="text" id="customs_duty" name="customs_duty" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="vat_value">VAT Value:</label></td>
+                                    <td><input type="text" id="vat_value" name="vat_value" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="other_cost">Other Cost:</label></td>
+                                    <td><input type="text" id="other_cost" name="other_cost" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="declared_value">Declared Value:</label></td>
+                                    <td><input type="text" id="declared_value" name="declared_value" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="supplier_name">Supplier Name:</label></td>
+                                    <td>
+                                            <select id="supplier_name" name="supplier_name">
+                                                    {% for name in purchase_suppliers %}
+                                                            <option value="{{ name }}">{{ name }}</option>
+                                                    {% endfor %}
+                                            </select>
+                                    </td>
+                            </tr>
+                            <tr>
+                                    <td><label for="supplier_invoice_no">Supplier Invoice No:</label></td>
+                                    <td><input type="text" id="supplier_invoice_no" name="supplier_invoice_no"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="country">Country:</label></td>
+                                    <td><input type="text" id="country" name="country"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="invoice_date">Invoice Date:</label></td>
+                                    <td><input type="date" id="invoice_date" name="invoice_date" value="{{ datetime.now().strftime('%Y-%m-%d') }}"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="invoice_value">Invoice Value:</label></td>
+                                    <td><input type="text" id="invoice_value" name="invoice_value" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="shipping_agent_name">Shipping Agent Name:</label></td>
+                                    <td>
+                                            <select id="shipping_agent_name" name="shipping_agent_name">
+                                                    {% for name in shipping_suppliers %}
+                                                            <option value="{{ name }}">{{ name }}</option>
+                                                    {% endfor %}
+                                            </select>
+                                    </td>
+                            </tr>
+                            <tr>
+                                    <td><label for="shipping_invoice_no">Shipping Invoice No:</label></td>
+                                    <td><input type="text" id="shipping_invoice_no" name="shipping_invoice_no"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="shipping_invoice_date">Shipping Invoice Date:</label></td>
+                                    <td><input type="date" id="shipping_invoice_date" name="shipping_invoice_date" value="{{ datetime.now().strftime('%Y-%m-%d') }}"></td>
+                            </tr>
+                            <tr>
+                                    <td><label for="shipping_invoice_value">Shipping Invoice Value:</label></td>
+                                    <td><input type="text" id="shipping_invoice_value" name="shipping_invoice_value" onblur="this.value = formatToThreeDecimals(this.value)"></td>
+                            </tr>
+                    </table>
+                    <button type="submit" class="btn">Save Product</button>
+            </form>
+    </div>
 
-  <script>
-      // Get references to the radio buttons and fields.
-      const existingRadio = document.querySelector('input[name="product_type"][value="existing"]');
-      const newRadio = document.querySelector('input[name="product_type"][value="new"]');
-      const existingRow = document.getElementById('existing_product_row');
-      const newRow = document.getElementById('new_product_row');
-      const existingSelect = document.getElementById('existing_product_name');
-      const newProductInput = document.getElementById('new_product_name');
-      const productSnoInput = document.getElementById('product_s_no');
-      // The new product S.No value passed from the server.
-      const newProductNumber = "{{ new_product_number }}";
+<script>
+        // Get references to the radio buttons and fields.
+        const existingRadio = document.querySelector('input[name="product_type"][value="existing"]');
+        const newRadio = document.querySelector('input[name="product_type"][value="new"]');
+        const existingRow = document.getElementById('existing_product_row');
+        const newRow = document.getElementById('new_product_row');
+        const existingSelect = document.getElementById('existing_product_name');
+        const newProductInput = document.getElementById('new_product_name');
+        const productSnoInput = document.getElementById('product_s_no');
+        const quantityInput = document.getElementById('quantity');
+        // The new product S.No value passed from the server.
+        const newProductNumber = "{{ new_product_number }}";
 
-      // Update the S.No field based on the selected existing product.
-      function updateExistingProductSno() {
-          const selectedOption = existingSelect.options[existingSelect.selectedIndex];
-          const sno = selectedOption.getAttribute('data-sno');
-          productSnoInput.value = sno;
-      }
+        // Helper function to format a value to a float with 3 decimal places.
+        function formatToThreeDecimals(value) {
+                const number = parseFloat(value);
+                return isNaN(number) ? value : number.toFixed(3);
+        }
 
-      // Toggle between existing and new product modes.
-      function toggleProductType() {
-          if (existingRadio.checked) {
-              existingRow.style.display = '';
-              newRow.style.display = 'none';
-              existingSelect.disabled = false;
-              newProductInput.disabled = true;
-              updateExistingProductSno();
-          } else {
-              existingRow.style.display = 'none';
-              newRow.style.display = '';
-              existingSelect.disabled = true;
-              newProductInput.disabled = false;
-              productSnoInput.value = newProductNumber;
-          }
-      }
+        // Update the S.No field based on the selected existing product.
+        function updateExistingProductSno() {
+                const selectedOption = existingSelect.options[existingSelect.selectedIndex];
+                let sno = selectedOption.getAttribute('data-sno');
+                productSnoInput.value = formatToThreeDecimals(sno);
+        }
 
-      existingRadio.addEventListener('change', toggleProductType);
-      newRadio.addEventListener('change', toggleProductType);
-      existingSelect.addEventListener('change', updateExistingProductSno);
+        // Toggle between existing and new product modes.
+        function toggleProductType() {
+                if (existingRadio.checked) {
+                        existingRow.style.display = '';
+                        newRow.style.display = 'none';
+                        existingSelect.disabled = false;
+                        newProductInput.disabled = true;
+                        updateExistingProductSno();
+                } else {
+                        existingRow.style.display = 'none';
+                        newRow.style.display = '';
+                        existingSelect.disabled = true;
+                        newProductInput.disabled = false;
+                        productSnoInput.value = formatToThreeDecimals(newProductNumber);
+                }
+        }
 
-      window.addEventListener('DOMContentLoaded', () => {
-          toggleProductType();
-      });
-  </script>
+        existingRadio.addEventListener('change', toggleProductType);
+        newRadio.addEventListener('change', toggleProductType);
+        existingSelect.addEventListener('change', updateExistingProductSno);
+
+        // Format quantity input on blur to have 3 decimal places.
+        quantityInput.addEventListener('blur', function() {
+                quantityInput.value = formatToThreeDecimals(quantityInput.value);
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+                toggleProductType();
+        });
+</script>
 </body>
 </html>

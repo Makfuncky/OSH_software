@@ -7,8 +7,10 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+  
   <div class="container">
     <h1>Receivables List</h1>
+    <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
 
     {% if receivables %}
       <div class="table-container">
@@ -29,18 +31,18 @@
                 <td>{{ receivable.invoice_number }}</td>
                 <td>{{ receivable.customer_name }}</td>
                 <td>{{ receivable.invoice_date }}</td>
-                <td>{{ "%.2f"|format(receivable.invoice_total) }}</td>
-                <td>{{ "%.2f"|format(receivable.total_received) }}</td>
-                <td>{{ "%.2f"|format(receivable.remaining_receivable) }}</td>
+                <td>{{ "%.2f"|format(receivable.invoice_total|float) }}</td>
+                <td>{{ "%.3f"|format(receivable.total_received|float) }}</td>
+                <td>{{ "%.3f"|format(receivable.remaining_receivable|float) }}</td>
               </tr>
             {% endfor %}
           </tbody>
           <tfoot>
             <tr>
               <td colspan="3"><strong>Total</strong></td>
-              <td>{{ "%.2f"|format(total_invoice) }}</td>
-              <td>{{ "%.2f"|format(total_received) }}</td>
-              <td>{{ "%.2f"|format(total_remaining) }}</td>
+              <td>{{ "%.3f"|format(total_invoice|float) }}</td>
+              <td>{{ "%.3f"|format(total_received|float) }}</td>
+              <td>{{ "%.3f"|format(total_remaining|float) }}</td>
             </tr>
           </tfoot>
         </table>

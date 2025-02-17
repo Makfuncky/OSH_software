@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Ledger</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* Basic styling */
+        body { 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 1000px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-row { 
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+        label { 
+            min-width: 150px;
+            text-align: right;
+            margin-right: 10px;
+        }
+        input, select {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        @media (max-width: 600px) {
+            label { 
+                text-align: left;
+                min-width: 100px;
+            }
+            .form-row { 
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Hide the H1 in print, but keep it on web */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            /* Hide form & buttons in print */
+            form, button {
+                display: none;
+            }
+
+            /* Header image at the top */
+            .print-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .print-header img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* Customer details in a box, left-aligned */
+            .customer-details {
+                display: block !important; /* ensure it appears in print */
+                border: 1px solid #000;
+                padding: 10px;
+                margin-bottom: 20px;
+                font-size: 12px;
+                line-height: 1.2;
+                text-align: left;
+                width: 90%;
+                max-width: 1000px;
+                margin: 0 auto 20px auto;
+            }
+
+            /* Top row: date range on right, heading on left */
+            .top-row {
+                display: flex !important; /* show in print */
+                justify-content: space-between;
+                align-items: center;
+                width: 90%;
+                max-width: 1000px;
+                margin: 0 auto 20px auto;
+            }
+            .ledger-heading {
+                font-size: 16px; /* smaller than original */
+                margin: 0;
+            }
+            .ledger-heading p {
+                margin: 0; /* remove extra spacing */
+            }
+
+            .date-range {
+                font-size: 12px;
+                text-align: right;
+            }
+
+            /* Table styling */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 0 auto;
+            }
+            table th, table td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+            }
+            table th {
+                background-color: #f2f2f2;
+            }
+        }
+    </style>
+    <script>
+        // Load the customer list from the embedded JSON
+        let customers = [];
+        window.onload = function() {
+            const custData = document.getElementById("customer_data");
+            if(custData) {
+                customers = JSON.parse(custData.textContent);
+            }
+            // Set today's date for End Date field if not already set by server
+            let endDateField = document.getElementById("end_date");
+            if(!endDateField.value) {
+                let today = new Date().toISOString().split("T")[0];
+                endDateField.value = today;
+            }
+        };
+
+        // When the Customer Serial No (code) dropdown changes, update the Customer Name dropdown.
+        function syncCodeToName() {
+            const codeSelect = document.getElementById("customer_code");
+            const nameSelect = document.getElementById("customer_name");
+            const selectedCode = codeSelect.value;
+            for(let i = 0; i < customers.length; i++) {
+                if(customers[i].code === selectedCode) {
+                    nameSelect.value = customers[i].name;
+                    return;
+                }
+            }
+            nameSelect.value = "";
+        }
+
+        // When the Customer Name dropdown changes, update the Customer Serial No dropdown.
+        function syncNameToCode() {
+            const codeSelect = document.getElementById("customer_code");
+            const nameSelect = document.getElementById("customer_name");
+            const selectedName = nameSelect.value;
+            for(let i = 0; i < customers.length; i++) {
+                if(customers[i].name === selectedName) {
+                    codeSelect.value = customers[i].code;
+                    return;
+                }
+            }
+            codeSelect.value = "";
+        }
+    </script>
+</head>
+<body>
+    <!-- H1 that is visible on the web but hidden in print -->
+    <h1 class="no-print">Customer Ledger</h1>
+    <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
+    <hr class="no-print">
+
+    <!-- Print Header (visible only when printing) -->
+    <div class="print-header" style="display:none;">
+        <img src="{{ url_for('static', filename='OSH_Header_Nornal.jpg') }}" alt="Header Image">
+    </div>
+
+    <!-- Customer Details box (print-only, left-aligned) -->
+    <div class="customer-details" style="display:none;">
+        <p><strong>Customer Name:</strong> {{ customer_name or 'N/A' }}</p>
+        <p><strong>Address:</strong> {{ address or 'N/A' }}</p>
+        <p><strong>VAT No:</strong> {{ vat_no or 'N/A' }}</p>
+        <p><strong>CR No:</strong> {{ company_registration_no or 'N/A' }}</p>
+    </div>
+
+    <!-- Single row: date range on right, heading on left (print-only) -->
+    <div class="top-row" style="display:none;">
+        <div class="ledger-heading">
+            <p>Customer Ledger</p>
+        </div>
+        <div class="date-range">
+            <p>
+                <strong>Start Date:</strong> {{ start_date or '' }} 
+                &nbsp;&nbsp; 
+                <strong>End Date:</strong> {{ end_date or today_date }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Single-page form (visible on screen, hidden in print) -->
+    <form method="POST">
+        <div class="form-row">
+            <label for="customer_code">Customer Serial No:</label>
+            <select name="customer_code" id="customer_code" onchange="syncCodeToName()">
+                <option value="">--Select Serial No--</option>
+                {% for cust in customer_list %}
+                    <option value="{{ cust.code }}" {% if customer_code and customer_code == cust.code %}selected{% endif %}>{{ cust.code }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="customer_name">Customer Name:</label>
+            <select name="customer_name" id="customer_name" onchange="syncNameToCode()">
+                <option value="">--Select Customer Name--</option>
+                {% for cust in customer_list %}
+                    <option value="{{ cust.name }}" {% if customer_name and customer_name == cust.name %}selected{% endif %}>{{ cust.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" required value="{{ start_date or '' }}">
+            
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" id="end_date" required value="{{ today_date }}">
+        </div>
+        
+        <!-- Buttons row with both Generate Ledger and Print Ledger side by side -->
+        <div class="form-row">
+            <button type="submit">Generate Ledger</button>
+            <button type="button" onclick="window.print()">Print Ledger</button>
+        </div>
+    </form>
+
+    <hr class="no-print">
+    {% if message %}
+        <p><strong>{{ message }}</strong></p>
+    {% endif %}
+
+    {% if ledger %}
+    <table>
+        <thead>
+            <tr>
+                <th>S no</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Type of Transaction</th>
+                <th>Debit Amount</th>
+                <th>Credit Amount</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in ledger %}
+                <tr>
+                    <td>{{ entry.sno }}</td>
+                    <td>{{ entry.date_str }}</td>
+                    <td>{{ entry.description }}</td>
+                    <td>{{ entry.type }}</td>
+                    <td>{{ "%.3f"|format(entry.debit) if entry.debit else "" }}</td>
+                    <td>{{ "%.3f"|format(entry.credit) if entry.credit else "" }}</td>
+                    <td>{{ "%.3f"|format(entry.balance) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <!-- Embed the customer_list as JSON for use in JavaScript -->
+    <script type="application/json" id="customer_data">{{ customer_list|tojson }}</script>
+
+    <!-- Script to show print-only elements when printing -->
+    <script>
+        // Show/hide print-only elements
+        window.onbeforeprint = function() {
+            document.querySelectorAll('.print-header, .customer-details, .top-row')
+                .forEach(function(el) { el.style.display = 'block'; });
+        };
+        window.onafterprint = function() {
+            document.querySelectorAll('.print-header, .customer-details, .top-row')
+                .forEach(function(el) { el.style.display = 'none'; });
+        };
+    </script>
+</body>
+</html>

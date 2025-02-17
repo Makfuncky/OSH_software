@@ -13,6 +13,7 @@
 <body>
     <div class="container">
         <h1>Add Supplier</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
         <form method="POST">
             <label for="supplier_s_no">Supplier S.No:</label>
             <input type="text" id="supplier_s_no" name="supplier_s_no" value="{{ new_supplier_number }}" readonly>
@@ -39,7 +40,6 @@
             <button type="submit" class="btn">Save Supplier</button>
         </form>
         <br>
-        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
     </div>
 </body>
 </html>

@@ -8,6 +8,7 @@
 <body>
     <div class="container">
         <h1>Add New Customer</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
         <form method="POST">
             <table>
                 <tr>
@@ -61,7 +62,6 @@
             </table>
             <button type="submit" class="btn">Save Customer</button>
         </form>
-        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
     </div>
 </body>
 </html>

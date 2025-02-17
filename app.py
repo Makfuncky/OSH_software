@@ -481,6 +481,229 @@ def upload_customers():
     return render_template('upload_customers.html')
 
 
+#*______________________________________________________________________________ Customer Ledger
+
+
+
+class CustomerLedgerProcessor:
+    def __init__(self, customer_list):
+        # customer_list should be a list of dicts with keys "code" and "name"
+        self.customer_list = customer_list
+
+    def get_selected_customer(self, customer_code, customer_name):
+        """
+        Returns the customer dict (from self.customer_list) matching either
+        the customer code or the customer name.
+        """
+        for cust in self.customer_list:
+            if customer_code and cust["code"] == customer_code:
+                return cust
+            if customer_name and cust["name"] == customer_name:
+                return cust
+        return None
+
+    def parse_date_range(self, start_date_str, end_date_str):
+        """
+        Parses start and end dates from strings. Invoice dates (in invoice.json)
+        are assumed to be in format "07-Dec-24" (day-monthAbbr-year) while payment
+        dates (in received.json) are in "YYYY-MM-DD".
+        """
+        try:
+            start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+            end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+            return start_date, end_date
+        except Exception as e:
+            return None, None
+
+    def fetch_invoices(self, customer_name, start_date, end_date):
+        """
+        Load invoices from invoice.json, filter for the given customer_name and date range.
+        For each matching invoice, build a ledger entry with:
+            - date, description (invoice_number), type "Invoice",
+              credit = sum(net_amount of items), debit = 0.
+        """
+        ledger_entries = []
+        invoice_file = get_file_path('invoice.json')
+        if not os.path.exists(invoice_file):
+            return ledger_entries
+
+        with open(invoice_file, 'r', encoding='utf-8') as f:
+            try:
+                invoices = json.load(f)
+            except json.JSONDecodeError:
+                invoices = []
+
+        for inv in invoices:
+            # Compare customer name (trimmed)
+            if inv.get("customer_name", "").strip() != customer_name.strip():
+                continue
+            try:
+                # Parse invoice date – expected format "07-Dec-24"
+                inv_date = datetime.strptime(inv.get("date", "").strip(), "%d-%b-%y")
+            except Exception:
+                continue
+
+            if not (start_date <= inv_date <= end_date):
+                continue
+
+            # Sum the net amounts in the invoice items.
+            try:
+                credit_amount = round(sum(float(item.get('net_amount', 0)) for item in inv.get("items", [])), 3)
+            except Exception:
+                credit_amount = 0.0
+
+            ledger_entries.append({
+                "date": inv_date,
+                "description": inv.get("invoice_number", ""),
+                "type": "Invoice",
+                "debit": 0.0,
+                "credit": credit_amount
+            })
+        return ledger_entries
+
+    def fetch_payments(self, customer_name, start_date, end_date):
+        """
+        Load payments from received.json. For each payment record,
+        check allocations and for each allocation matching the customer_name,
+        create a ledger entry with:
+            - date (from payment.received_date),
+            - description: "Payment for {invoice_number}",
+            - type "Payment",
+            - debit = amount_againts_invoice, credit = 0.
+        """
+        ledger_entries = []
+        payments_file = get_file_path('received.json')
+        if not os.path.exists(payments_file):
+            return ledger_entries
+
+        with open(payments_file, 'r', encoding='utf-8') as f:
+            try:
+                payments = json.load(f)
+            except json.JSONDecodeError:
+                payments = []
+
+        for payment in payments:
+            try:
+                pay_date = datetime.strptime(payment.get("received_date", "").strip(), "%Y-%m-%d")
+            except Exception:
+                continue
+
+            if not (start_date <= pay_date <= end_date):
+                continue
+
+            for alloc in payment.get("allocations", []):
+                if alloc.get("custoemr_name", "").strip() != customer_name.strip():
+                    continue
+                try:
+                    debit_amount = round(float(alloc.get("amount_againts_invoice", 0)), 3)
+                except Exception:
+                    debit_amount = 0.0
+
+                ledger_entries.append({
+                    "date": pay_date,
+                    "description": "Payment for " + alloc.get("invoice_number", ""),
+                    "type": "Payment",
+                    "debit": debit_amount,
+                    "credit": 0.0
+                })
+        return ledger_entries
+
+    def build_ledger(self, invoice_entries, payment_entries):
+        """
+        Merge the invoice and payment entries, sort by date (and time if available)
+        and calculate a running balance.
+        Balance is computed as:
+            running_balance += (credit - debit)
+        Each entry is augmented with a serial number (sno) and a formatted date string.
+        """
+        all_entries = invoice_entries + payment_entries
+        if not all_entries:
+            return []
+
+        # Sort by date (ascending)
+        all_entries.sort(key=lambda x: x["date"])
+
+        running_balance = 0.0
+        ledger = []
+        for idx, entry in enumerate(all_entries, start=1):
+            running_balance += entry["credit"] - entry["debit"]
+            entry["sno"] = idx
+            entry["balance"] = round(running_balance, 3)
+            entry["date_str"] = entry["date"].strftime("%Y-%m-%d")
+            ledger.append(entry)
+        return ledger
+
+    def process_ledger(self, customer_code, customer_name, start_date_str, end_date_str):
+        """
+        Master function that uses all the functions above:
+          - determines the customer,
+          - parses the dates,
+          - fetches invoices and payments,
+          - builds and returns the ledger.
+        Returns (ledger, error_message). If no ledger entries found,
+        error_message contains "Customer Not Found."
+        """
+        selected = self.get_selected_customer(customer_code, customer_name)
+        if not selected:
+            return None, "Customer Not Found."
+
+        start_date, end_date = self.parse_date_range(start_date_str, end_date_str)
+        if not start_date or not end_date:
+            return None, "Invalid date range."
+
+        # Use the customer name from the selected customer record
+        cust_name = selected["name"]
+
+        invoice_entries = self.fetch_invoices(cust_name, start_date, end_date)
+        payment_entries = self.fetch_payments(cust_name, start_date, end_date)
+        ledger = self.build_ledger(invoice_entries, payment_entries)
+
+        if not ledger:
+            return None, "Customer Not Found."
+        return ledger, ""
+
+
+@app.route('/customer_ledger', methods=['GET', 'POST'])
+def customer_ledger():
+    # Load customer list from customers.json
+    customers_file = get_file_path('customers.json')
+    customer_list = []
+    if os.path.exists(customers_file):
+        with open(customers_file, 'r', encoding='utf-8') as f:
+            try:
+                cust_data = json.load(f)
+                for c in cust_data:
+                    customer_list.append({
+                        "code": c.get("customer_s_no", "").strip(),
+                        "name": c.get("customer_name", "").strip()
+                    })
+            except json.JSONDecodeError:
+                customer_list = []
+    
+    ledger = None
+    message = ""
+    customer_code = request.form.get("customer_code", "")
+    customer_name = request.form.get("customer_name", "")
+    start_date = request.form.get("start_date", "")
+    end_date = request.form.get("end_date", "")
+    
+    if request.method == "POST" and start_date and end_date:
+        processor = CustomerLedgerProcessor(customer_list)
+        ledger, message = processor.process_ledger(customer_code, customer_name, start_date, end_date)
+    
+    # Optionally, you can pass today's date if you want server-side default for the start_date field.
+    today = datetime.today().strftime("%Y-%m-%d")
+    
+    return render_template("customer_ledger.html",
+                           customer_list=customer_list,
+                           customer_code=customer_code,
+                           customer_name=customer_name,
+                           start_date=start_date,
+                           today_date=today,
+                           ledger=ledger,
+                           message=message)
+
+
 #*______________________________________________________________________________ Product Functions
 class Product:
     def __init__(self, product_s_no, product_name, rate, vat_check, declaration_number, release_date, quantity, customs_duty, vat_value, other_cost, supplier_name, 
@@ -589,38 +812,72 @@ def add_product():
             product_name = request.form.get('new_product_name') or ""
             last_product_number = get_last_product_number_db()
             product_s_no = generate_new_product_number(last_product_number)
-        
-        # Build the product_data list.
+
+        # Convert numeric fields to float with 3 decimals; Quantity also as float.
+        try:
+            rate = round(float(request.form.get('rate') or 0), 3)
+        except:
+            rate = 0.0
+        try:
+            quantity = round(float(request.form.get('quantity') or 0), 3)
+        except:
+            quantity = 0.0
+        try:
+            customs_duty = round(float(request.form.get('customs_duty') or 0), 3)
+        except:
+            customs_duty = 0.0
+        try:
+            vat_value = round(float(request.form.get('vat_value') or 0), 3)
+        except:
+            vat_value = 0.0
+        try:
+            other_cost = round(float(request.form.get('other_cost') or 0), 3)
+        except:
+            other_cost = 0.0
+        try:
+            declared_value = round(float(request.form.get('declared_value') or 0), 3)
+        except:
+            declared_value = 0.0
+        try:
+            invoice_value = round(float(request.form.get('invoice_value') or 0), 3)
+        except:
+            invoice_value = 0.0
+        try:
+            shipping_invoice_value = round(float(request.form.get('shipping_invoice_value') or 0), 3)
+        except:
+            shipping_invoice_value = 0.0
+
+        # Build the product_data list with strings for numeric values.
         product_data = [
             product_s_no,
             product_name,
-            request.form.get('rate'),
+            str(rate),
             'Yes' if request.form.get('vat_check') else 'No',
             request.form.get('declaration_number'),
             request.form.get('release_date'),
-            request.form.get('quantity'),
-            request.form.get('customs_duty'),
-            request.form.get('vat_value'),
-            request.form.get('other_cost'),
-            request.form.get('declared_value'),
+            str(quantity),
+            str(customs_duty),
+            str(vat_value),
+            str(other_cost),
+            str(declared_value),
             request.form.get('supplier_name'),
             request.form.get('supplier_invoice_no'),
             request.form.get('country'),
             request.form.get('invoice_date'),
-            request.form.get('invoice_value'),
+            str(invoice_value),
             request.form.get('shipping_agent_name'),
             request.form.get('shipping_invoice_no'),
             request.form.get('shipping_invoice_date'),
-            request.form.get('shipping_invoice_value')
+            str(shipping_invoice_value)
         ]
-        
+
         print("[DEBUG] Raw product_data from form:", product_data)
-        
+
         # Require that S.No, Product Name, and Rate are provided.
         if not product_data[0] or not product_data[1] or not product_data[2]:
             flash("Product S.No, Product Name, and Rate are required!", "warning")
             return redirect(url_for('add_product'))
-        
+
         try:
             if save_product_to_db(product_data):
                 flash("Product saved successfully!", "success")
@@ -632,7 +889,7 @@ def add_product():
             flash(f"Error: {e}", "danger")
             print("[ERROR] Exception in POST /add_product:", e)
             return redirect(url_for('add_product'))
-    
+
     # GET: Prepare data for rendering the form.
     products = Product.load_products_from_json()
     unique_products = {}
@@ -641,17 +898,17 @@ def add_product():
         if key not in unique_products:
             unique_products[key] = p
     existing_products = list(unique_products.values())
-    
+
     try:
         suppliers = Supplier.load_suppliers_from_json()
     except Exception:
         suppliers = []
     purchase_suppliers = [s.supplier_name for s in suppliers if s.supplier_type.lower() == "purchase"] if suppliers else []
     shipping_suppliers = [s.supplier_name for s in suppliers if s.supplier_type.lower() == "shipping"] if suppliers else []
-    
+
     last_product_number = get_last_product_number_db()
     new_product_number = generate_new_product_number(last_product_number)
-    
+
     print("[DEBUG] Rendering form with new_product_number:", new_product_number)
     return render_template(
         'add_product.html',
@@ -669,24 +926,24 @@ def save_product_to_db(product_data):
         data_dict = {
             'product_s_no': sanitized[0],
             'product_name': sanitized[1],
-            'rate': float(sanitized[2] or 0),
+            'rate': round(float(sanitized[2] or 0), 3),
             'vat_check': sanitized[3],
             'declaration_number': sanitized[4],
             'release_date': sanitized[5],
-            'quantity': sanitized[6],
-            'customs_duty': float(sanitized[7] or 0),
-            'vat_value': float(sanitized[8] or 0),
-            'other_cost': float(sanitized[9] or 0),
-            'declared_value': float(sanitized[10] or 0),
+            'quantity': round(float(sanitized[6] or 0), 3),
+            'customs_duty': round(float(sanitized[7] or 0), 3),
+            'vat_value': round(float(sanitized[8] or 0), 3),
+            'other_cost': round(float(sanitized[9] or 0), 3),
+            'declared_value': round(float(sanitized[10] or 0), 3),
             'supplier_name': sanitized[11],
             'supplier_invoice_no': sanitized[12],
             'country': sanitized[13],
             'invoice_date': sanitized[14],
-            'invoice_value': float(sanitized[15] or 0),
+            'invoice_value': round(float(sanitized[15] or 0), 3),
             'shipping_agent_name': sanitized[16],
             'shipping_invoice_no': sanitized[17],
             'shipping_invoice_date': sanitized[18],
-            'shipping_invoice_value': float(sanitized[19] or 0)
+            'shipping_invoice_value': round(float(sanitized[19] or 0), 3)
         }
         print("[DEBUG] Data dictionary to be saved:", data_dict)
         Product.save_product_to_json(data_dict)
@@ -937,24 +1194,35 @@ def generate_invoice():
             product_count = 0
 
         for i in range(product_count + 1):
-            product_info = {
-                "Product Name": request.form.get(f'product_name_{i}'),
-                "Quantity": request.form.get(f'quantity_{i}'),
-                "Rate": request.form.get(f'rate_{i}'),
-                "Gr Amount": request.form.get(f'gr_amount_{i}'),
-                "VAT": request.form.get(f'vat_{i}'),
-                "Net Amount": request.form.get(f'net_amount_{i}')
-            }
-            if product_info["Product Name"]:
+            product_name = request.form.get(f'product_name_{i}')
+            if product_name:
+                try:
+                    quantity = round(float(request.form.get(f'quantity_{i}') or 0), 3)
+                    rate = round(float(request.form.get(f'rate_{i}') or 0), 3)
+                    gr_amount = round(float(request.form.get(f'gr_amount_{i}') or 0), 3)
+                    vat = round(float(request.form.get(f'vat_{i}') or 0), 3)
+                    net_amount = round(float(request.form.get(f'net_amount_{i}') or 0), 3)
+                except ValueError:
+                    flash("Invalid numeric value in one of the product fields.", "warning")
+                    return redirect(url_for('generate_invoice'))
+
+                product_info = {
+                    "Product Name": product_name,
+                    "Quantity": quantity,
+                    "Rate": rate,
+                    "Gr Amount": gr_amount,
+                    "VAT": vat,
+                    "Net Amount": net_amount
+                }
                 invoice_data['Products'].append(product_info)
 
         # Basic checks
         if not all([
-            invoice_data["Date"], 
-            invoice_data["Invoice Number"], 
-            invoice_data["Customer Name"], 
-            invoice_data["Address"], 
-            invoice_data["Customer VAT No"], 
+            invoice_data["Date"],
+            invoice_data["Invoice Number"],
+            invoice_data["Customer Name"],
+            invoice_data["Address"],
+            invoice_data["Customer VAT No"],
             invoice_data["Customer PO No"]
         ]):
             flash("Please fill out all required fields!", "warning")
@@ -1018,11 +1286,11 @@ def save_invoice_to_db(invoice_data):
         for p in invoice_data['Products']:
             p_name = sanitize_string(p["Product Name"])
             try:
-                quantity = int(sanitize_string(str(p["Quantity"])))
-                rate = float(sanitize_string(str(p["Rate"])))
-                gr_amount = float(sanitize_string(str(p["Gr Amount"])))
-                vat = float(sanitize_string(str(p["VAT"])))
-                net = float(sanitize_string(str(p["Net Amount"])))
+                quantity = round(float(sanitize_string(str(p["Quantity"]))), 3)
+                rate = round(float(sanitize_string(str(p["Rate"]))), 3)
+                gr_amount = round(float(sanitize_string(str(p["Gr Amount"]))), 3)
+                vat = round(float(sanitize_string(str(p["VAT"]))), 3)
+                net = round(float(sanitize_string(str(p["Net Amount"]))), 3)
             except ValueError:
                 print("Skipping invalid product due to numeric parse error.")
                 continue
@@ -1330,12 +1598,12 @@ def view_invoice(invoice_number):
             # Find the invoice with the matching invoice_number
             invoice = next((inv for inv in invoices if inv['invoice_number'] == invoice_number), None)
             if invoice:
-                # Calculate totals from the items
+                # Calculate totals from the items with float conversion and 3 decimal precision
                 items = invoice.get('items', [])
-                total_quantity = sum(item.get('quantity', 0) for item in items)
-                total_gross_amount = sum(item.get('gr_amount', 0) for item in items)
-                total_vat = sum(item.get('vat', 0) for item in items)
-                total_net_amount = sum(item.get('net_amount', 0) for item in items)
+                total_quantity = round(sum(float(item.get('quantity', 0)) for item in items), 3)
+                total_gross_amount = round(sum(float(item.get('gr_amount', 0)) for item in items), 3)
+                total_vat = round(sum(float(item.get('vat', 0)) for item in items), 3)
+                total_net_amount = round(sum(float(item.get('net_amount', 0)) for item in items), 3)
                 
                 # Add totals to the invoice dictionary
                 invoice['total_quantity'] = total_quantity
@@ -1512,15 +1780,15 @@ def update_invoice():
         "items": []
     }
 
-    # Dynamically capture product details
+    # Dynamically capture product details, converting numbers to float with 3 decimals precision.
     index = 1
     while request.form.get(f'product_name_{index}'):
         product_name = request.form.get(f'product_name_{index}')
-        quantity = int(request.form.get(f'quantity_{index}', 0))
-        rate = float(request.form.get(f'rate_{index}', 0.0))
-        gr_amount = float(request.form.get(f'gr_amount_{index}', 0.0))
-        vat = float(request.form.get(f'vat_{index}', 0.0))
-        net_amount = float(request.form.get(f'net_amount_{index}', 0.0))
+        quantity = round(float(request.form.get(f'quantity_{index}', 0.0)), 3)
+        rate = round(float(request.form.get(f'rate_{index}', 0.0)), 3)
+        gr_amount = round(float(request.form.get(f'gr_amount_{index}', 0.0)), 3)
+        vat = round(float(request.form.get(f'vat_{index}', 0.0)), 3)
+        net_amount = round(float(request.form.get(f'net_amount_{index}', 0.0)), 3)
 
         updated_invoice["items"].append({
             "id": index,
@@ -1553,10 +1821,10 @@ def record_received():
     open_invoices = []
     for inv in all_invoices:
         # Compute invoice total as the sum of the net amounts of its items.
-        invoice_total = sum(float(item.get('net_amount', 0)) for item in inv.items)
+        invoice_total = round(sum(float(item.get('net_amount', 0)) for item in inv.items), 3)
         # Compute the total payments already applied for this invoice.
-        received = get_total_received_for_invoice(inv.invoice_number)
-        remaining = invoice_total - received
+        received = round(get_total_received_for_invoice(inv.invoice_number), 3)
+        remaining = round(invoice_total - received, 3)
         if remaining > 0:
             open_invoices.append({
                 "invoice_number": inv.invoice_number,
@@ -1581,9 +1849,9 @@ def record_received():
         allocations = []
         for inv_num, alloc, comm in zip(invoice_numbers, allocated_amounts, comments_list):
             try:
-                amt = float(alloc)
+                amt = round(float(alloc), 3)
             except:
-                amt = 0
+                amt = 0.0
             allocations.append({
                 "invoice_number": inv_num,
                 "custoemr_name": "",      # To be filled below via lookup
@@ -1596,13 +1864,13 @@ def record_received():
         for alloc in allocations:
             cust_name, rem = lookup_invoice_details(alloc["invoice_number"])
             alloc["custoemr_name"] = cust_name
-            alloc["remaining_amount"] = rem
+            alloc["remaining_amount"] = round(rem, 3)
         
         # Build the payment record.
         try:
             payment_record = {
                 "bank_name": bank_name,
-                "recieved_amount": float(recieved_amount),
+                "recieved_amount": round(float(recieved_amount), 3),
                 "received_date": received_date,
                 "transaction_type": transaction_type,
                 "cheque_details": cheque_details,
@@ -1646,27 +1914,25 @@ def get_total_received_for_invoice(invoice_number):
         for alloc in payment.get("allocations", []):
             if alloc.get("invoice_number") == invoice_number:
                 try:
-                    total += float(alloc.get("amount_againts_invoice", 0))
+                    total += round(float(alloc.get("amount_againts_invoice", 0)), 3)
                 except ValueError:
                     pass
-    return total
+    return round(total, 3)
 
 def lookup_invoice_details(invoice_number):
-    # Assume Invoice.load_invoices_from_json() is available.
     for inv in Invoice.load_invoices_from_json():
         if inv.invoice_number == invoice_number:
-            # Compute remaining as total - (sum of previous payments)
-            invoice_total = sum(float(item.get('net_amount', 0)) for item in inv.items)
-            previous_payments = get_total_received_for_invoice(invoice_number)  # Your helper function
-            remaining = invoice_total - previous_payments
+            invoice_total = round(sum(float(item.get('net_amount', 0)) for item in inv.items), 3)
+            previous_payments = get_total_received_for_invoice(invoice_number)
+            remaining = round(invoice_total - previous_payments, 3)
             return inv.customer_name, remaining
     return "", 0.0
 
 def compute_remaining_for_invoice(invoice):
-    # Assume invoice_total is computed as the sum of the net_amount of all items.
-    invoice_total = sum(float(item.get('net_amount', 0)) for item in invoice.items)
-    received = get_total_received_for_invoice(invoice.invoice_number)
-    return invoice_total - received
+    # Compute invoice_total as the sum of the net_amount of all items with 3-decimal precision
+    invoice_total = round(sum(float(item.get('net_amount', 0)) for item in invoice.items), 3)
+    received = round(get_total_received_for_invoice(invoice.invoice_number), 3)
+    return round(invoice_total - received, 3)
 
 
 #*______________________________________________________________________________ List Received Payments
@@ -1727,7 +1993,7 @@ def upload_received():
                     "allocations": []
                 }
                 try:
-                    payments_dict[payment_key]["recieved_amount"] = float(recieved_amount)
+                    payments_dict[payment_key]["recieved_amount"] = round(float(recieved_amount), 3)
                 except ValueError:
                     payments_dict[payment_key]["recieved_amount"] = 0.0
 
@@ -1737,14 +2003,19 @@ def upload_received():
             if invoice_number:
                 # Create an allocation record.
                 try:
-                    alloc_amount = float(row.get("amount_againts_invoice", "0").strip())
+                    alloc_amount = round(float(row.get("amount_againts_invoice", "0").strip()), 3)
                 except ValueError:
                     alloc_amount = 0.0
+
+                try:
+                    remaining_amt = round(float(row.get("remaining_amount", "0").strip() or 0), 3)
+                except ValueError:
+                    remaining_amt = 0.0
 
                 allocation = {
                     "invoice_number": invoice_number,
                     "custoemr_name": row.get("custoemr_name", "").strip(),
-                    "remaining_amount": float(row.get("remaining_amount", "0").strip() or 0),
+                    "remaining_amount": remaining_amt,
                     "amount_againts_invoice": alloc_amount,
                     "comments": row.get("comments", "").strip()
                 }
@@ -1764,7 +2035,7 @@ def upload_received():
                 if not alloc.get("custoemr_name"):
                     alloc["custoemr_name"] = cust_name
                 if not alloc.get("remaining_amount"):
-                    alloc["remaining_amount"] = rem
+                    alloc["remaining_amount"] = round(rem, 3)
 
         # Load existing payments from received.json.
         payments_file = get_file_path('received.json')
@@ -1798,10 +2069,16 @@ def download_received_detailed():
                 payments_data = []
     else:
         payments_data = []
-    
+
+    def format_float(value):
+        try:
+            return f"{float(value):.3f}"
+        except (ValueError, TypeError):
+            return value
+
     si = io.StringIO()
     csv_writer = csv.writer(si)
-    
+
     # Write header row.
     csv_writer.writerow([
         "bank_name", "recieved_amount", "received_date",
@@ -1809,11 +2086,11 @@ def download_received_detailed():
         "invoice_number", "custoemr_name", "remaining_amount",
         "amount_againts_invoice", "comments"
     ])
-    
+
     # Write one row per allocation.
     for payment in payments_data:
         bank_name = payment.get("bank_name", "")
-        recieved_amount = payment.get("recieved_amount", "")
+        recieved_amount = format_float(payment.get("recieved_amount", ""))
         received_date = payment.get("received_date", "")
         transaction_type = payment.get("transaction_type", "")
         cheque_details = payment.get("cheque_details", "")
@@ -1822,8 +2099,8 @@ def download_received_detailed():
             for alloc in allocations:
                 invoice_number = alloc.get("invoice_number", "")
                 custoemr_name = alloc.get("custoemr_name", "")
-                remaining_amount = alloc.get("remaining_amount", "")
-                amount_againts_invoice = alloc.get("amount_againts_invoice", "")
+                remaining_amount = format_float(alloc.get("remaining_amount", ""))
+                amount_againts_invoice = format_float(alloc.get("amount_againts_invoice", ""))
                 comments = alloc.get("comments", "")
                 csv_writer.writerow([
                     bank_name, recieved_amount, received_date,
@@ -1838,7 +2115,7 @@ def download_received_detailed():
                 transaction_type, cheque_details,
                 "", "", "", "", ""
             ])
-    
+
     output = si.getvalue()
     return Response(
         output,
@@ -1850,14 +2127,14 @@ def lookup_invoice_details(invoice_number):
     # Loop through invoices from your invoice database.
     for inv in Invoice.load_invoices_from_json():
         if inv.invoice_number == invoice_number:
-            # Compute invoice total (sum of net_amount of items)
-            invoice_total = sum(float(item.get('net_amount', 0)) for item in inv.items)
-            # Get previous payments applied (using your helper)
-            previous_payments = get_total_received_for_invoice(invoice_number)
-            remaining = invoice_total - previous_payments
+            # Compute invoice total (sum of net_amount of items) rounded to 3 decimals.
+            invoice_total = round(sum(float(item.get('net_amount', 0)) for item in inv.items), 3)
+            # Get previous payments applied (using your helper) and round to 3 decimals.
+            previous_payments = round(get_total_received_for_invoice(invoice_number), 3)
+            # Calculate remaining amount rounded to 3 decimals.
+            remaining = round(invoice_total - previous_payments, 3)
             return inv.customer_name, remaining
     return "", 0.0
-
 
 #*______________________________________________________________________________ List Receivable
 @app.route('/list_receivable')
@@ -1865,41 +2142,41 @@ def list_receivable():
     """
     Render a page that displays all invoices with remaining receivables.
     The remaining amount is calculated by subtracting the total received
-    from the invoice total (sum of the net amounts of its items).
+    from the invoice total (sum of the net amounts of its items), all rounded to 3 decimals.
     """
     invoices = Invoice.load_invoices_from_json()  # Load all invoices
     receivables = []
-    total_invoice = 0.0
-    total_received = 0.0
-    total_remaining = 0.0
-    
+    total_invoice_sum = 0.0
+    total_received_sum = 0.0
+    total_remaining_sum = 0.0
+
     # Loop through each invoice and calculate the remaining receivable
     for invoice in invoices:
-        invoice_total = sum(float(item.get('net_amount', 0)) for item in invoice.items)
-        total_received = get_total_received_for_invoice(invoice.invoice_number)
-        remaining_receivable = invoice_total - total_received
-        
+        invoice_total = round(sum(float(item.get('net_amount', 0)) for item in invoice.items), 3)
+        received = round(get_total_received_for_invoice(invoice.invoice_number), 3)
+        remaining_receivable = round(invoice_total - received, 3)
+
         if remaining_receivable > 0:  # Only show invoices with remaining balance
             receivables.append({
                 "invoice_number": invoice.invoice_number,
                 "customer_name": invoice.customer_name,
-                "invoice_total": invoice_total,
-                "total_received": total_received,
-                "remaining_receivable": remaining_receivable,
+                "invoice_total": f"{invoice_total:.3f}",
+                "total_received": f"{received:.3f}",
+                "remaining_receivable": f"{remaining_receivable:.3f}",
                 "invoice_date": invoice.date  # Add the invoice date
             })
-            
+
             # Update the totals
-            total_invoice += invoice_total
-            total_received += total_received
-            total_remaining += remaining_receivable
+            total_invoice_sum += invoice_total
+            total_received_sum += received
+            total_remaining_sum += remaining_receivable
 
     return render_template(
         'list_receivable.html',
         receivables=receivables,
-        total_invoice=total_invoice,
-        total_received=total_received,
-        total_remaining=total_remaining
+        total_invoice=f"{total_invoice_sum:.3f}",
+        total_received=f"{total_received_sum:.3f}",
+        total_remaining=f"{total_remaining_sum:.3f}"
     )
 
 @app.route('/download_receivable')
@@ -1913,12 +2190,12 @@ def download_receivable():
 
     # Calculate receivables for each invoice
     for invoice in invoices:
-        # Calculate invoice total (sum of net_amounts)
-        invoice_total = sum(float(item.get('net_amount', 0)) for item in invoice.items)
-        # Get the total amount received for this invoice
-        received = get_total_received_for_invoice(invoice.invoice_number)
-        # Calculate remaining receivable
-        remaining_receivable = invoice_total - received
+        # Calculate invoice total (sum of net_amounts) and round to 3 decimal places
+        invoice_total = round(sum(float(item.get('net_amount', 0)) for item in invoice.items), 3)
+        # Get the total amount received for this invoice and round it
+        received = round(get_total_received_for_invoice(invoice.invoice_number), 3)
+        # Calculate remaining receivable and round it
+        remaining_receivable = round(invoice_total - received, 3)
 
         if remaining_receivable > 0:
             receivables.append({
@@ -1938,25 +2215,32 @@ def download_receivable():
     writer = csv.writer(si)
 
     # Write header
-    writer.writerow(["Invoice Number", "Customer Name", "Date of Invoice", "Invoice Total", "Total Received", "Remaining Receivable"])
+    writer.writerow([
+        "Invoice Number",
+        "Customer Name",
+        "Date of Invoice",
+        "Invoice Total",
+        "Total Received",
+        "Remaining Receivable"
+    ])
 
-    # Write receivables rows
+    # Write receivables rows with float values formatted to 3 decimal places
     for rec in receivables:
         writer.writerow([
             rec["invoice_number"],
             rec["customer_name"],
             rec["invoice_date"],
-            f"{rec['invoice_total']:.2f}",
-            f"{rec['total_received']:.2f}",
-            f"{rec['remaining_receivable']:.2f}"
+            f"{rec['invoice_total']:.3f}",
+            f"{rec['total_received']:.3f}",
+            f"{rec['remaining_receivable']:.3f}"
         ])
 
-    # Write totals row
+    # Write totals row with values formatted to 3 decimals
     writer.writerow([
         "Total", "", "",
-        f"{total_invoice:.2f}",
-        f"{total_received_total:.2f}",
-        f"{total_remaining:.2f}"
+        f"{total_invoice:.3f}",
+        f"{total_received_total:.3f}",
+        f"{total_remaining:.3f}"
     ])
 
     output = si.getvalue()
@@ -1983,7 +2267,7 @@ def get_total_received_for_invoice(invoice_number):
                     total += float(alloc.get("amount_againts_invoice", 0))
                 except ValueError:
                     pass
-    return total
+    return round(total, 3)
 
 
 #*______________________________________________________________________________ success Routes

@@ -12,11 +12,19 @@
     table, th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background-color: #f2f2f2; }
     tfoot td { font-weight: bold; }
+    /* Flex container for the two buttons */
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Record Received Payment</h1>
+    <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
+
     <form method="POST">
       <!-- Payment Summary -->
       <label for="bank_name">Bank Name:</label>
@@ -86,12 +94,14 @@
           </tr>
         </tfoot>
       </table>
-      <button type="button" id="add_row" class="btn">Add Invoice Row</button>
-      <br><br>
-      <button type="submit" class="btn">Record Payment</button>
+      
+      <!-- Flex container for buttons -->
+      <div class="button-container">
+        <button type="button" id="add_row" class="btn">Add Invoice Row</button>
+        <button type="submit" class="btn">Record Payment</button>
+      </div>
     </form>
     <br>
-    <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
   </div>
   
   <script>

@@ -1,0 +1,193 @@
+
+'''
+Invoice.json dataset
+
+    {
+        "id": 1,
+        "invoice_number": "T-2556",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 5.0,
+                "rate": 25.0,
+                "gr_amount": 125.0,
+                "vat": 6.25,
+                "net_amount": 131.25
+            },
+            {
+                "id": 2,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG (Block)",
+                "quantity": 8.0,
+                "rate": 18.0,
+                "gr_amount": 144.0,
+                "vat": 7.2,
+                "net_amount": 151.2
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "invoice_number": "T-2557",
+        "date": "07-Dec-24",
+        "customer_name": "John Doe",
+        "address": "Al Khuwair",
+        "vat_no": "OMxxxxx002",
+        "po_no": "P-10000002",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 12.0,
+                "rate": 25.0,
+                "gr_amount": 300.0,
+                "vat": 15.0,
+                "net_amount": 315.0
+            },
+            {
+                "id": 2,
+                "product_name": "Cheddar Cheese - Mild - 5 x 1KG (Block)",
+                "quantity": 45.0,
+                "rate": 25.0,
+                "gr_amount": 1125.0,
+                "vat": 56.25,
+                "net_amount": 1181.25
+            }
+        ]
+    },
+'''
+
+'''
+received.json dataset
+
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1500.0,
+        "received_date": "2025-02-05",
+        "transaction_type": "Cash Deposit",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2556",
+                "custoemr_name": "John Doe",
+                "remaining_amount": 282.45,
+                "amount_againts_invoice": 282.45,
+                "comments": "Finished Payment"
+            },
+            {
+                "invoice_number": "T-2579",
+                "custoemr_name": "World Gift Distinguish LLC (City Mart)",
+                "remaining_amount": 583.38,
+                "amount_againts_invoice": 583.38,
+                "comments": "Frist Payment"
+            },
+            {
+                "invoice_number": "T-2578",
+                "custoemr_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+                "remaining_amount": 765.65,
+                "amount_againts_invoice": 634.17,
+                "comments": "Frist Payment"
+            }
+        ]
+    },
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1000.0,
+        "received_date": "2025-02-05",
+        "transaction_type": "Online Transfer",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2580",
+                "custoemr_name": "Ayham Al Sarayji Trading (Seeb)",
+                "remaining_amount": 719.5,
+                "amount_againts_invoice": 500.0,
+                "comments": "if any details"
+            },
+            {
+                "invoice_number": "T-2561",
+                "custoemr_name": "Fatayar Ali Al Tayar",
+                "remaining_amount": 620.0,
+                "amount_againts_invoice": 500.0,
+                "comments": "if any details"
+            }
+        ]
+    },
+'''
+'''
+customers.json dataset
+    {
+        "customer_s_no": "C_0002",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "sales_person": "Mohtesan",
+        "address": "Sultanate of Oman,                                             ",
+        "vat_no": "OM1100050332",
+        "credit_term": "Cash",
+        "contact_person": "Sajid",
+        "contact_number": "91787576",
+        "company_registration_no": "0"
+    },
+    {
+        "customer_s_no": "C_0003",
+        "customer_name": "Quality & Saving Center",
+        "sales_person": "Mohtesan",
+        "address": "Amerat",
+        "vat_no": "OM1100041460",
+        "credit_term": "Cash",
+        "contact_person": "Magdi",
+        "contact_number": "79903234",
+        "company_registration_no": "0"
+    },
+'''
+
+
+Make multi-step form for generating the ledger for the customer and also show the ledger details in the table format.
+
+1- Show the input field for Customer Name or Customer Serial No. 
+    - Customer Serial No from customers.json file which is 'customer_s_no' If the Customer Code is entered, the Customer Name should automatically appear in Customer Name field.
+    - Customer Name feild have the customer list dropdown from customes.json file which is 'customer_name' and if the Customer Name is selected, the Customer Code should automatically appear in Customer Code field.
+
+2- Show the Date Range field with Start Date and End Date.
+
+3- Show the Generate Ledger button.
+    - when click on Generate Ledger should show the ledger details which columns includes following.
+        - S no 
+        - Date
+        - Description
+        - Type of Transaction
+        - Debit Amount
+        - Credit Amount
+        - Balance
+
+4- Now How to prepare the data for ledger.
+    - Take the invoice.json file for select all the invoices total of net_amount column and put into Credit Amount column of Ledger for that particular Customer between of Date Range and Description should be Invoice Number.
+    - Take the received.json file for select all the payments total of amount_againts_invoice column and put into Debit Amount column of Ledger for that particular Customer between of Date Range and Description should be Payment for Invoice Number.
+    - For Balance column, you have to calculate the running balance of Debit and Credit Amount.
+
+5- Give at top the Print the Ledger button to print the ledger.
+
+6- If no ledger entries found for the given customer then show the message "Customer Not Found."
+
+Make class and function for the above task, and break all the task into the function and call the function in the main function.
+
+First of all, Customer Name and Code should to come in one row 
+Secondly, the Start date and end date also on one row and End Date always show today date
+thrid, all should to come on one page not multiples page.
+forth, it is still not detecting Customer List and not showing the dropdown in Customer Serial Number 
+
+Generate Ledger Button and Print Ledger Button should to come side by side at the place of Generate Ledger button
+
+
+
+
+For Print View 
+1- use at top OSH_Header_Nornal.jpg.
+then Customer Details includes Customer Name - Address - VAT No - CR no (company_registration_no)
+then heading "Customer Ledger"
+then Start Date and End Date
+then give the table

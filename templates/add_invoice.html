@@ -8,6 +8,7 @@
 <body>
     <div class="container">
         <h1>Generate Invoice</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
         
         <!-- Single form for the entire invoice -->
         <form method="POST" action="{{ url_for('generate_invoice') }}">
@@ -147,7 +148,6 @@
 
         <!-- Optional: Link back to Home -->
         <br>
-        <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
     </div>
 
     <script>

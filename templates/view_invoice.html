@@ -148,32 +148,22 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ item.product_name }}</td>
-                    <td>{{ item.quantity | default(0) | round(2) }}</td>
-                    <td>{{ item.rate | default(0) | round(2) }}</td>
-                    <td>{{ item.gr_amount | default(0) | round(2) }}</td>
-                    <td>{{ item.vat | default(0) | round(2) }}</td>
-                    <td>{{ item.net_amount | default(0) | round(2) }}</td>
+                    <td>{{ item.quantity | default(0) | round(3) }}</td>
+                    <td>{{ item.rate | default(0) | round(3) }}</td>
+                    <td>{{ item.gr_amount | default(0) | round(3) }}</td>
+                    <td>{{ item.vat | default(0) | round(3) }}</td>
+                    <td>{{ item.net_amount | default(0) | round(3) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
-            <!-- <tfoot>
-                <tr class="total-row">
-                    <td colspan="2">Total</td>
-                    <td>{{ invoice.total_quantity }}</td>
-                    <td></td>
-                    <td>{{ invoice.total_gross_amount }}</td>
-                    <td>{{ invoice.total_vat }}</td>
-                    <td>{{ invoice.total_net_amount }}</td>
-                </tr>
-            </tfoot> -->
             <tfoot>
                 <tr class="total-row">
                     <td colspan="2">Total</td>
-                    <td>{{ invoice.total_quantity }}</td>
+                    <td>{{ invoice.total_quantity | default(0) | round(3) }}</td>
                     <td></td>
-                    <td>{{ invoice.total_gross_amount }}</td>
-                    <td>{{ invoice.total_vat }}</td>
-                    <td>{{ invoice.total_net_amount }}</td>
+                    <td>{{ invoice.total_gross_amount | default(0) | round(3) }}</td>
+                    <td>{{ invoice.total_vat | default(0) | round(3) }}</td>
+                    <td>{{ invoice.total_net_amount | default(0) | round(3) }}</td>
                 </tr>
             </tfoot>
         </table>

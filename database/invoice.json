@@ -467,17 +467,17 @@
         "items": [
             {
                 "id": 1,
-                "product_name": "AL Kamil - Slice - 18KG",
-                "quantity": 20,
-                "rate": 25.0,
-                "gr_amount": 500.0,
-                "vat": 25.0,
-                "net_amount": 525.0
+                "product_name": "Mozzarella Cheese - Raastin (Pure) 6 x 1.8KG - (Block)",
+                "quantity": 0.25,
+                "rate": 17.05,
+                "gr_amount": 4.263,
+                "vat": 0.213,
+                "net_amount": 4.476
             },
             {
                 "id": 2,
-                "product_name": "Mr. John French Fries Cut (10 * 10 mm) (4 x 2.5KG)",
-                "quantity": 10,
+                "product_name": "None",
+                "quantity": 10.0,
                 "rate": 6.0,
                 "gr_amount": 60.0,
                 "vat": 3.0,
@@ -485,8 +485,8 @@
             },
             {
                 "id": 3,
-                "product_name": "OPA French Fries (9 * 9 mm) (5 x 2.5KG)",
-                "quantity": 0,
+                "product_name": "None",
+                "quantity": 0.0,
                 "rate": 8.0,
                 "gr_amount": 0.0,
                 "vat": 0.0,
