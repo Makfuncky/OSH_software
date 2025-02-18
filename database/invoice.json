@@ -6,6 +6,7 @@
         "customer_name": "John Doe",
         "address": "Al Khuwair",
         "vat_no": "OMxxxxx002",
+        "payment_term": "",
         "po_no": "P-10000002",
         "items": [
             {
@@ -35,6 +36,7 @@
         "customer_name": "John Doe",
         "address": "Al Khuwair",
         "vat_no": "OMxxxxx002",
+        "payment_term": "",
         "po_no": "P-10000002",
         "items": [
             {
@@ -64,6 +66,7 @@
         "customer_name": "John Doe",
         "address": "Al Khuwair",
         "vat_no": "OMxxxxx002",
+        "payment_term": "",
         "po_no": "P-10000002",
         "items": [
             {
@@ -93,6 +96,7 @@
         "customer_name": "John Doe",
         "address": "Al Khuwair",
         "vat_no": "OMxxxxx002",
+        "payment_term": "",
         "po_no": "P-10000002",
         "items": [
             {
@@ -131,6 +135,7 @@
         "customer_name": "John Doe",
         "address": "Al Khuwair",
         "vat_no": "OMxxxxx002",
+        "payment_term": "",
         "po_no": "P-10000002",
         "items": [
             {
@@ -160,6 +165,7 @@
         "customer_name": "Fatayar Ali Al Tayar",
         "address": "Al Khoud 6",
         "vat_no": "OMxxxxx001",
+        "payment_term": "",
         "po_no": "P-10000001",
         "items": [
             {
@@ -189,6 +195,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -218,6 +225,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -238,6 +246,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -267,6 +276,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -296,6 +306,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -316,6 +327,7 @@
         "customer_name": "Ayham Al Sarayji Trading (Seeb)",
         "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11",
         "vat_no": "OM1100292606",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -354,6 +366,7 @@
         "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
         "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
         "vat_no": "OM1100316903",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -383,6 +396,7 @@
         "customer_name": "Ayham Al Sarayji Trading (Seeb)",
         "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11 ",
         "vat_no": "OM1100292606",
+        "payment_term": "",
         "po_no": "01117",
         "items": [
             {
@@ -403,6 +417,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "Cash",
         "items": [
             {
@@ -434,6 +449,7 @@
         "customer_name": "Ather LLC",
         "address": "Mabella",
         "vat_no": "OM111100001",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -463,6 +479,7 @@
         "customer_name": "Ather LLC",
         "address": "Mabella",
         "vat_no": "OM111100001",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -476,7 +493,7 @@
             },
             {
                 "id": 2,
-                "product_name": "None",
+                "product_name": "Tail fat 20KG",
                 "quantity": 10.0,
                 "rate": 6.0,
                 "gr_amount": 60.0,
@@ -485,7 +502,7 @@
             },
             {
                 "id": 3,
-                "product_name": "None",
+                "product_name": "Tail fat 20KG",
                 "quantity": 0.0,
                 "rate": 8.0,
                 "gr_amount": 0.0,
@@ -501,6 +518,7 @@
         "customer_name": "World Gift Distinguish LLC (City Mart)",
         "address": "Sultanate of Oman,",
         "vat_no": "OM1100050332",
+        "payment_term": "",
         "po_no": "Cash",
         "items": [
             {
@@ -522,6 +540,7 @@
         "customer_name": "Ather LLC",
         "address": "Mabella",
         "vat_no": "OM111100001",
+        "payment_term": "",
         "po_no": "",
         "items": [
             {
@@ -542,6 +561,7 @@
         "customer_name": "Ayham Al Sarayji Trading (Seeb)",
         "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11",
         "vat_no": "OM1100292606",
+        "payment_term": "",
         "po_no": "0",
         "items": [
             {
@@ -573,6 +593,7 @@
         "customer_name": "Ayham Al Sarayji Trading (Seeb)",
         "address": "Sultanate of Oman, Muscat, Bousher, 0 ,1 ,3116 , .???????, 11",
         "vat_no": "OM1100292606",
+        "payment_term": "",
         "po_no": "0",
         "items": [
             {
@@ -594,6 +615,7 @@
         "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
         "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
         "vat_no": "OM1100316903",
+        "payment_term": "",
         "po_no": "30 days",
         "items": [
             {
@@ -615,12 +637,13 @@
         "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
         "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
         "vat_no": "OM1100316903",
-        "po_no": "30 days",
+        "payment_term": "30 days",
+        "po_no": "",
         "items": [
             {
                 "id": 1,
-                "product_name": "AL Kamil - Slice - 18KG",
-                "quantity": 43,
+                "product_name": "Tail fat 20KG",
+                "quantity": 43.0,
                 "rate": 7.55,
                 "gr_amount": 324.65,
                 "vat": 0.0,
@@ -629,7 +652,7 @@
             {
                 "id": 2,
                 "product_name": "Tail fat 20KG",
-                "quantity": 21,
+                "quantity": 21.0,
                 "rate": 20.0,
                 "gr_amount": 420.0,
                 "vat": 21.0,
@@ -638,11 +661,244 @@
             {
                 "id": 3,
                 "product_name": "Strawberry",
-                "quantity": 20,
+                "quantity": 20.0,
                 "rate": 25.0,
                 "gr_amount": 500.0,
                 "vat": 0.0,
                 "net_amount": 500.0
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "invoice_number": "T-2579",
+        "date": "18-Feb-25",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
+        "vat_no": "OM1100316903",
+        "payment_term": "30 days",
+        "po_no": "",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 24,
+                "product_name": "Mozzarella Cheese - Raastin - 6 x 1.8KG - (Block)",
+                "quantity": 25.0,
+                "rate": 6.5,
+                "gr_amount": 162.5,
+                "vat": 0.0,
+                "net_amount": 162.5
+            },
+            {
+                "id": 2,
+                "invoice_id": 24,
+                "product_name": "Mr. John French Fries Cut (Crinkle) (4x2.5KG)",
+                "quantity": 25.0,
+                "rate": 6.2,
+                "gr_amount": 155.0,
+                "vat": 7.75,
+                "net_amount": 162.75
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "invoice_number": "T-2580",
+        "date": "18-Feb-25",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "payment_term": "30 days",
+        "po_no": "Cash",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (Crinkle) (4x2.5KG)",
+                "quantity": 5.255,
+                "rate": 5.955,
+                "gr_amount": 31.294,
+                "vat": 1.565,
+                "net_amount": 32.858
+            },
+            {
+                "id": 2,
+                "product_name": "Tail fat 20KG",
+                "quantity": 20.0,
+                "rate": 1.7,
+                "gr_amount": 34.0,
+                "vat": 1.7,
+                "net_amount": 35.7
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "invoice_number": "T-2581",
+        "date": "18-Feb-25",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "payment_term": "30 days",
+        "po_no": "Cash",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 26,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 15.0,
+                "rate": 7.5,
+                "gr_amount": 112.5,
+                "vat": 5.625,
+                "net_amount": 118.125
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "invoice_number": "T-2582",
+        "date": "18-Feb-25",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
+        "vat_no": "OM1100316903",
+        "payment_term": "30 days",
+        "po_no": "30 days",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 27,
+                "product_name": "Tail fat 20KG",
+                "quantity": 20.0,
+                "rate": 1.7,
+                "gr_amount": 34.0,
+                "vat": 1.7,
+                "net_amount": 35.7
+            },
+            {
+                "id": 2,
+                "invoice_id": 27,
+                "product_name": "AL Kamil - Bobby Veal - 18KG",
+                "quantity": 5.0,
+                "rate": 28.0,
+                "gr_amount": 140.0,
+                "vat": 0.0,
+                "net_amount": 140.0
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "invoice_number": "T-2583",
+        "date": "18-Feb-25",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "payment_term": "30 days",
+        "po_no": "30 days",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 28,
+                "product_name": "Tail fat 20KG",
+                "quantity": 20.0,
+                "rate": 1.7,
+                "gr_amount": 0.0,
+                "vat": 0.0,
+                "net_amount": 0.0
+            },
+            {
+                "id": 2,
+                "invoice_id": 28,
+                "product_name": "Tail fat 20KG",
+                "quantity": 0.0,
+                "rate": 0.0,
+                "gr_amount": 0.0,
+                "vat": 0.0,
+                "net_amount": 0.0
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "invoice_number": "T-2584",
+        "date": "18-Feb-25",
+        "customer_name": "AA LLC",
+        "address": "Mabellah, Muscat",
+        "vat_no": "OM14141441",
+        "payment_term": "30 days",
+        "po_no": "30",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 29,
+                "product_name": "Mr. John French Fries Cut (Crinkle) (4x2.5KG)",
+                "quantity": 12.0,
+                "rate": 6.0,
+                "gr_amount": 72.0,
+                "vat": 3.6,
+                "net_amount": 75.6
+            },
+            {
+                "id": 2,
+                "invoice_id": 29,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 12.0,
+                "rate": 7.5,
+                "gr_amount": 90.0,
+                "vat": 4.5,
+                "net_amount": 94.5
+            }
+        ]
+    },
+    {
+        "id": 30,
+        "invoice_number": "T-2585",
+        "date": "18-Feb-25",
+        "customer_name": "World Gift Distinguish LLC (City Mart)",
+        "address": "Sultanate of Oman,",
+        "vat_no": "OM1100050332",
+        "payment_term": "Cash",
+        "po_no": "PO121510",
+        "items": [
+            {
+                "id": 1,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 10.0,
+                "rate": 6.0,
+                "gr_amount": 60.0,
+                "vat": 3.0,
+                "net_amount": 63.0
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "invoice_number": "T-2586",
+        "date": "19-Feb-25",
+        "customer_name": "MUSCAT MARKETS FOR INVESTMENT LLC (Macro Hypermarket)",
+        "address": "Sultanate of Oman, Muscat, Al Seeb, Al Khawd, 113, 329, 0, 0",
+        "vat_no": "OM1100316903",
+        "payment_term": "30 days",
+        "po_no": "PO 7712",
+        "items": [
+            {
+                "id": 1,
+                "invoice_id": 31,
+                "product_name": "Mr. John French Fries Cut (7 * 7 mm) (4 x 2.25KG)",
+                "quantity": 15.25,
+                "rate": 7.499,
+                "gr_amount": 114.36,
+                "vat": 5.718,
+                "net_amount": 120.078
+            },
+            {
+                "id": 2,
+                "invoice_id": 31,
+                "product_name": "Mozzarella Cheese - Raastin (Pure) 6 x 1.8KG - (Block)",
+                "quantity": 2.0,
+                "rate": 17.5,
+                "gr_amount": 35.0,
+                "vat": 1.75,
+                "net_amount": 36.75
             }
         ]
     }

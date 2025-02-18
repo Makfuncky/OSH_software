@@ -191,3 +191,10 @@ then Customer Details includes Customer Name - Address - VAT No - CR no (company
 then heading "Customer Ledger"
 then Start Date and End Date
 then give the table
+
+Make changes media print as below
+1- remove the Customer Ledger written from top from just print media
+2- Aling Customer Details at left side inside nice proper box  
+3 - Aling Start Date and End Date in one row small font at right side before customer ledger heading.
+4- Customer Ledger heading font should be low
+5- all should to come nicely but fitted

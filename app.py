@@ -252,7 +252,7 @@ class Customer:
         sales_person, 
         address, 
         vat_no, 
-        credit_term, 
+        payment_term, 
         contact_person, 
         contact_number, 
         company_registration_no
@@ -262,7 +262,7 @@ class Customer:
         self.sales_person = sales_person
         self.address = address
         self.vat_no = vat_no
-        self.credit_term = credit_term
+        self.payment_term = payment_term
         self.contact_person = contact_person
         self.contact_number = contact_number
         self.company_registration_no = company_registration_no
@@ -328,7 +328,7 @@ def save_customer_to_db(customer_data):
             'sales_person': safe_data[2],
             'address': safe_data[3],
             'vat_no': safe_data[4],
-            'credit_term': safe_data[5],
+            'payment_term': safe_data[5],
             'contact_person': safe_data[6],
             'contact_number': safe_data[7],
             'company_registration_no': safe_data[8]
@@ -362,7 +362,7 @@ def add_customer():
             request.form.get('sales_person'),
             request.form.get('address'),
             request.form.get('vat_no'),
-            request.form.get('credit_term'),
+            request.form.get('payment_term'),
             request.form.get('contact_person'),
             request.form.get('contact_number'),
             request.form.get('company_registration_no')
@@ -409,14 +409,14 @@ def download_customers():
     # Write header row
     csv_writer.writerow([
         "customer_s_no", "customer_name", "sales_person", "address", 
-        "vat_no", "credit_term", "contact_person", "contact_number", "company_registration_no"
+        "vat_no", "payment_term", "contact_person", "contact_number", "company_registration_no"
     ])
     
     # Write customer rows
     for cust in customers:
         csv_writer.writerow([
             cust.customer_s_no, cust.customer_name, cust.sales_person, cust.address,
-            cust.vat_no, cust.credit_term, cust.contact_person, cust.contact_number,
+            cust.vat_no, cust.payment_term, cust.contact_person, cust.contact_number,
             cust.company_registration_no
         ])
     
@@ -443,7 +443,9 @@ def upload_customers():
             return redirect(url_for('upload_customers'))
         
         # Read CSV file as a UTF-8 decoded stream.
-        stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+        # stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+        # stream = io.StringIO(file.stream.read().decode("utf-8", errors="replace"), newline=None)
+        stream = io.StringIO(file.stream.read().decode("latin-1"), newline=None)
         csv_input = csv.DictReader(stream)
         inserted = 0
         skipped = 0
@@ -453,14 +455,14 @@ def upload_customers():
             # Generate a new customer code for this row.
             new_customer_number = generate_new_customer_number(get_last_customer_number_db())
             # Expect CSV columns to be named exactly as follows:
-            # customer_name, sales_person, address, vat_no, credit_term, contact_person, contact_number, company_registration_no
+            # customer_name, sales_person, address, vat_no, payment_term, contact_person, contact_number, company_registration_no
             customer_data = [
                 new_customer_number,  # Auto-generated new code.
                 row.get("customer_name", ""),
                 row.get("sales_person", ""),
                 row.get("address", ""),
                 row.get("vat_no", ""),
-                row.get("credit_term", ""),
+                row.get("payment_term", ""),
                 row.get("contact_person", ""),
                 row.get("contact_number", ""),
                 row.get("company_registration_no", "")
@@ -1103,13 +1105,14 @@ def upload_products():
 
 #*______________________________________________________________________________ Generate Invoice Functions
 class Invoice:
-    def __init__(self, id, invoice_number, date, customer_name, address, vat_no, po_no, items):
+    def __init__(self, id, invoice_number, date, customer_name, address, vat_no, po_no, payment_term, items):
         self.id = id
         self.invoice_number = invoice_number
         self.date = date
         self.customer_name = customer_name
         self.address = address
         self.vat_no = vat_no
+        self.payment_term = payment_term
         self.po_no = po_no
         self.items = items
 
@@ -1185,6 +1188,7 @@ def generate_invoice():
             "Customer Name": request.form.get('customer_name'),
             "Address": request.form.get('address'),
             "Customer VAT No": request.form.get('vat_no'),
+            "Payment Term": request.form.get('payment_term'),
             "Customer PO No": request.form.get('po_no'),
             "Products": []
         }
@@ -1223,6 +1227,7 @@ def generate_invoice():
             invoice_data["Customer Name"],
             invoice_data["Address"],
             invoice_data["Customer VAT No"],
+            invoice_data["Payment Term"],
             invoice_data["Customer PO No"]
         ]):
             flash("Please fill out all required fields!", "warning")
@@ -1246,7 +1251,8 @@ def generate_invoice():
         'name': c.customer_name,
         'address': c.address,
         'vat_no': c.vat_no,
-        'po_no': c.credit_term
+        'payment_term': c.payment_term
+        # 'po_no' is intentionally not loaded since it will be entered new.
     } for c in customers]
 
     # Load products
@@ -1279,6 +1285,7 @@ def save_invoice_to_db(invoice_data):
         c_name = sanitize_string(invoice_data['Customer Name'])
         addr = sanitize_string(invoice_data['Address'])
         vat_no = sanitize_string(invoice_data['Customer VAT No'])
+        payment_term = sanitize_string(invoice_data['Payment Term'])
         po_no = sanitize_string(invoice_data['Customer PO No'])
 
         # Build product list
@@ -1311,6 +1318,7 @@ def save_invoice_to_db(invoice_data):
             'customer_name': c_name,
             'address': addr,
             'vat_no': vat_no,
+            'payment_term': payment_term,
             'po_no': po_no,
             # No account/bank/branch fields in stored data
             'items': [
@@ -1756,6 +1764,7 @@ def fetch_invoice_from_db(invoice_number):
         'customer_name': invoice.customer_name,
         'address': invoice.address,
         'vat_no': invoice.vat_no,
+        'payment_term': invoice.payment_term,
         'po_no': invoice.po_no,
         'items': items
     }
@@ -1776,6 +1785,7 @@ def update_invoice():
         "customer_name": request.form.get('customer_name'),
         "address": request.form.get('address'),
         "vat_no": request.form.get('vat_no'),
+        "payment_term": request.form.get('payment_term'),
         "po_no": request.form.get('po_no'),
         "items": []
     }

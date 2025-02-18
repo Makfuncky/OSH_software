@@ -11,6 +11,8 @@
   <div class="container">
     <h1>Receivables List</h1>
     <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
+      <!-- Download Button using your .btn class -->
+      <a href="{{ url_for('download_receivable') }}" class="btn">Download Receivables as CSV</a>
 
     {% if receivables %}
       <div class="table-container">
@@ -47,8 +49,6 @@
           </tfoot>
         </table>
       </div>
-      <!-- Download Button using your .btn class -->
-      <a href="{{ url_for('download_receivable') }}" class="btn">Download Receivables as CSV</a>
       {% else %}
       <p class="no-receivables">No receivables found.</p>
     {% endif %}

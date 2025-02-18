@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
         body {
-            font-family: Arial, sans-serif; /* Ensuring normal font */
+            font-family: Arial, sans-serif;
             padding: 20px;
             margin: auto;
             color: #333;
@@ -26,26 +26,38 @@
         .header img {
             width: 100%;
         }
+        /* Unified styling for header and header-right */
         .header-right {
             text-align: right;
             margin-top: 10px;
+            font-size: 14px;
+            color: #333;
         }
         .header-right h2, .header-right p {
             margin: 0;
-            font-size: 16px;
+            font-size: inherit;
+            color: inherit;
         }
-        .table {
+        .customer-info {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 14px;
         }
-        .th, .td {
+        th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 5px; /* Reduced padding for lower row height */
             text-align: center;
+            color: #333;
         }
-        .th {
+        th {
             background-color: #f2f2f2;
+            color: #000; /* Force header text to black */
         }
         .total-row {
             font-weight: bold;
@@ -58,58 +70,74 @@
         .bank-info {
             display: none;
         }
-        /* .btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-        } */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
         @media print {
-            .body, .container {
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                border: none;
-                background: none;
-                box-shadow: none;
+            @page {
+            size: A4;
+            margin: 5mm 5mm 5mm 5mm; 
             }
+            /* Use table-header-group and table-footer-group to control repeating headers/footers in print */
+            thead {
+                display: table-header-group;
+            }
+            tfoot {
+                display: table-footer-group;
+            }
+
+            /* Ensure A4 sizing is used */
+            body, .container, .header, .customer-info, table, .bank-info {
+            font-size: 10px;
+            color: #000;
+            }
+            body, .container {
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: #fff;
+            box-shadow: none;
+            }
+            /* Table adjustments */
+            table {
+            width: 98%;
+            border-collapse: collapse;
+            margin: 0; /* Align table to the left */
+            }
+            th, td {
+            border: 1px solid #000;
+            padding: 3px; /* Reduced padding for lower row height */
+            text-align: center;
+            }
+            th {
+            background-color: #fff; /* Ensured white background */
+            color: #000; /* Force header text to black */
+            }
+            /* Note: Number rounding to 3-decimal places should be handled server-side */
             .container {
-                padding: 0;
-                margin: 0;
-                align-content: center;
+            max-width: 100%;
+            margin: 0; /* Removed auto centering */
+            padding: 10px;
             }
-            .customer-info {
-                margin: 0;
-                padding: 0;
-                font-size: 0.95rem;
-                line-height: 0.75rem;
+            .customer-info, .bank-info {
+            margin: 0;
+            padding: 5px;
+            line-height: 1.2;
             }
             .bank-info {
-                display: block;
-                position: relative;
-                margin-top: 2.5rem;
-                padding: 0;
-                font-size: 0.95rem;
-                line-height: 0.75rem;
+            display: block;
+            margin-top: 20px;
             }
             .header img {
-                width: 97.5%;   
+            width: 100%;   
             }
             .header-right {
-                text-align: right;
-                position: relative;
-                right: 2.5rem;
-                top: 15 rem;
-            }
-            .table {
-                position: relative;
-                margin-left: 2rem;                   
+            text-align: right;
+            margin-top: 10px;
             }
             .btn-container {
-                display: none;
+            display: none;
             }
         }
     </style>
@@ -128,7 +156,8 @@
             <p><strong>Customer Name:</strong> {{ invoice.customer_name }}</p>
             <p><strong>Address:</strong> {{ invoice.address }}</p>
             <p><strong>Customer VAT No:</strong> {{ invoice.vat_no }}</p>
-            <p><strong>Customer PO No:</strong> {{ invoice.po_no }}</p>    
+            <p><strong>Payment Term:</strong> {{ invoice.payment_term }}</p>
+            <p><strong>Customer LPO No:</strong> {{ invoice.po_no }}</p>    
         </div>
 
         <table>
@@ -139,7 +168,7 @@
                     <th>Quantity</th>
                     <th>Rate</th>
                     <th>Gr Amount</th>
-                    <th>VAT</th>
+                    <th>VAT 5%</th>
                     <th>Net Amount</th>
                 </tr>
             </thead>
@@ -169,13 +198,14 @@
         </table>
 
         <div class="bank-info">
-            <p><strong>PAMENT DETAILS:</strong> </p>
+            <p><strong>PAYMENT DETAILS:</strong> </p>
             <p><strong>ACCOUNT No:</strong> 0464-0601-5014-0019</p>
             <p><strong>BANK NAME:</strong> Bank Muscat, Al-Ansab Branch.</p>
         </div>
 
         <div class="btn-container">
             <button onclick="window.print()" class="btn">Print Invoice</button>
+            <a href="{{ url_for('dashboard') }}" class="btn">Back to Home</a>
         </div>
     </div>
 </body>

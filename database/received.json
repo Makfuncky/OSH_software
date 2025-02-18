@@ -127,5 +127,44 @@
                 "comments": "partail"
             }
         ]
+    },
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1000.0,
+        "received_date": "2025-02-18",
+        "transaction_type": "Cash Deposit",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2573",
+                "custoemr_name": "World Gift Distinguish LLC (City Mart)",
+                "remaining_amount": 250.0,
+                "amount_againts_invoice": 100.0,
+                "comments": ""
+            }
+        ]
+    },
+    {
+        "bank_name": "Bank Muscat",
+        "recieved_amount": 1000.0,
+        "received_date": "2025-02-18",
+        "transaction_type": "Cash Deposit",
+        "cheque_details": "",
+        "allocations": [
+            {
+                "invoice_number": "T-2572",
+                "custoemr_name": "Ather LLC",
+                "remaining_amount": 67.476,
+                "amount_againts_invoice": 10.0,
+                "comments": ""
+            },
+            {
+                "invoice_number": "T-2575",
+                "custoemr_name": "Ayham Al Sarayji Trading (Seeb)",
+                "remaining_amount": 1650.0,
+                "amount_againts_invoice": 180.0,
+                "comments": ""
+            }
+        ]
     }
 ]

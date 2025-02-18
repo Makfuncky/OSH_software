@@ -43,6 +43,9 @@
             <label for="vat_no">Customer VAT No:</label>
             <input type="text" id="vat_no" name="vat_no" readonly><br>
 
+            <label for="payment_term">Payment Term:</label>
+            <input type="text" id="payment_term" name="payment_term"><br>
+
             <label for="po_no">Customer PO No:</label>
             <input type="text" id="po_no" name="po_no"><br>
 
@@ -57,11 +60,11 @@
                         <th>Gr Amount</th>
                         <th>VAT</th>
                         <th>Net Amount</th>
-                        <th>Add</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="product_rows">
-                    <tr>
+                    <tr data-index="0">
                         <td>
                             <select id="product_name_0" name="product_name_0" onchange="updateProductDetails(0)">
                                 {% for name in product_names | unique %}
@@ -73,15 +76,16 @@
                             <input type="number"
                                    id="quantity_0"
                                    name="quantity_0"
-                                   value="0"
+                                   value="0.000"
+                                   step="0.001"
                                    onchange="updateProductDetails(0)">
                         </td>
                         <td>
                             <input type="number"
-                                   step="0.01"
                                    id="rate_0"
                                    name="rate_0"
-                                   value="0.00"
+                                   value="0.000"
+                                   step="0.001"
                                    onchange="updateProductDetails(0)">
                         </td>
                         <td>
@@ -106,7 +110,9 @@
                                    readonly>
                         </td>
                         <td>
-                            <button type="button" class="btn" onclick="addProductRow()">Add</button>
+                            <!-- Both Add and Remove buttons placed side-by-side -->
+                            <button type="button" class="btn" onclick="addProductRow()">+</button>
+                            <button type="button" class="btn" onclick="removeProductRow(0)">–</button>
                         </td>
                     </tr>
                 </tbody>
@@ -139,7 +145,7 @@
                 </tfoot>
             </table>
             
-            <!-- Keep track of how many product rows we have (start at 0 if we only have index 0) -->
+            <!-- Keep track of the latest product row index -->
             <input type="hidden" id="product_count" name="product_count" value="0">
 
             <!-- Submit button to generate the invoice -->
@@ -162,14 +168,19 @@
             if (customer) {
                 document.getElementById('address').value = customer.address;
                 document.getElementById('vat_no').value = customer.vat_no;
-                document.getElementById('po_no').value = customer.po_no;
+                document.getElementById('payment_term').value = customer.payment_term;
+                // PO No. should be entered manually, so we do not auto-populate it.
+            } else {
+                document.getElementById('address').value = "";
+                document.getElementById('vat_no').value = "";
+                document.getElementById('payment_term').value = "";
             }
         }
 
         function updateProductDetails(index) {
             const productName = document.getElementById(`product_name_${index}`).value;
-            const quantity = parseFloat(document.getElementById(`quantity_${index}`).value) || 0;
-            const rate = parseFloat(document.getElementById(`rate_${index}`).value) || 0;
+            const quantity = parseFloat((parseFloat(document.getElementById(`quantity_${index}`).value) || 0).toFixed(3));
+            const rate = parseFloat((parseFloat(document.getElementById(`rate_${index}`).value) || 0).toFixed(3));
             const product = products.find(p => p.name === productName);
 
             if (product) {
@@ -188,60 +199,70 @@
 
         function addProductRow() {
             const productCountEl = document.getElementById('product_count');
-            const count = parseInt(productCountEl.value);
-            const newCount = count + 1;
-            productCountEl.value = newCount;
+            let count = parseInt(productCountEl.value);
+            count++;
+            productCountEl.value = count;
+            const newIndex = count;
 
-            // Build a new row for the products table
+            // Build a new row for the products table with data-index attribute.
             const newRow = `
-                <tr>
+                <tr data-index="${newIndex}">
                     <td>
-                        <select id="product_name_${newCount}" name="product_name_${newCount}" onchange="updateProductDetails(${newCount})">
-                            {% for name in product_names %}
+                        <select id="product_name_${newIndex}" name="product_name_${newIndex}" onchange="updateProductDetails(${newIndex})">
+                            {% for name in product_names | unique %}
                                 <option value="{{ name }}">{{ name }}</option>
                             {% endfor %}
                         </select>
                     </td>
                     <td>
-                        <input type="number" id="quantity_${newCount}" name="quantity_${newCount}" value="0" onchange="updateProductDetails(${newCount})">
+                        <input type="number" id="quantity_${newIndex}" name="quantity_${newIndex}" value="0.000" step="0.001" onchange="updateProductDetails(${newIndex})">
                     </td>
                     <td>
-                        <input type="number" step="0.01" id="rate_${newCount}" name="rate_${newCount}" value="0.00" onchange="updateProductDetails(${newCount})">
+                        <input type="number" step="0.001" id="rate_${newIndex}" name="rate_${newIndex}" value="0.000" onchange="updateProductDetails(${newIndex})">
                     </td>
                     <td>
-                        <input type="text" id="gr_amount_${newCount}" name="gr_amount_${newCount}" value="0.000" readonly>
+                        <input type="text" id="gr_amount_${newIndex}" name="gr_amount_${newIndex}" value="0.000" readonly>
                     </td>
                     <td>
-                        <input type="text" id="vat_${newCount}" name="vat_${newCount}" value="0.000" readonly>
+                        <input type="text" id="vat_${newIndex}" name="vat_${newIndex}" value="0.000" readonly>
                     </td>
                     <td>
-                        <input type="text" id="net_amount_${newCount}" name="net_amount_${newCount}" value="0.000" readonly>
+                        <input type="text" id="net_amount_${newIndex}" name="net_amount_${newIndex}" value="0.000" readonly>
                     </td>
                     <td>
-                        <button type="button" class="btn" onclick="addProductRow()">Add</button>
+                        <button type="button" class="btn" onclick="addProductRow()">+</button>
+                        <button type="button" class="btn" onclick="removeProductRow(${newIndex})">–</button>
                     </td>
                 </tr>
             `;
-
             document.getElementById('product_rows').insertAdjacentHTML('beforeend', newRow);
         }
 
+        function removeProductRow(index) {
+            const row = document.querySelector(`tr[data-index="${index}"]`);
+            if (row) {
+                row.remove();
+                updateTotal();
+            }
+        }
+
         function updateTotal() {
-            const productCount = parseInt(document.getElementById('product_count').value);
             let totalGrAmount = 0;
             let totalVat = 0;
             let totalNetAmount = 0;
 
-            // Loop from 0..productCount, inclusive, because we start at 0 row
-            for (let i = 0; i <= productCount; i++) {
-                const gr = parseFloat(document.getElementById(`gr_amount_${i}`).value) || 0;
-                const vat = parseFloat(document.getElementById(`vat_${i}`).value) || 0;
-                const net = parseFloat(document.getElementById(`net_amount_${i}`).value) || 0;
+            // Loop over all existing rows in the tbody.
+            const rows = document.querySelectorAll('#product_rows tr');
+            rows.forEach(row => {
+                const idx = row.getAttribute('data-index');
+                const gr = parseFloat(document.getElementById(`gr_amount_${idx}`).value) || 0;
+                const vat = parseFloat(document.getElementById(`vat_${idx}`).value) || 0;
+                const net = parseFloat(document.getElementById(`net_amount_${idx}`).value) || 0;
 
                 totalGrAmount += gr;
                 totalVat += vat;
                 totalNetAmount += net;
-            }
+            });
 
             document.getElementById('total_gr_amount').value = totalGrAmount.toFixed(3);
             document.getElementById('total_vat').value = totalVat.toFixed(3);
